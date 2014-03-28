@@ -24,6 +24,7 @@
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical">
 
             <com.mattkula.brownsnews.views.CustomTextView
@@ -45,15 +46,13 @@
                     android:layout_marginBottom="8dip"
                     />
 
-            <TextView
+
+            <WebView
                     android:id="@+id/article_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:typeface="serif"
-                    android:textSize="15sp"
-                    android:layout_marginLeft="8dip"
-                    android:layout_marginRight="8dip"
+                    android:background="@color/browns_brown"
+                    android:alpha="0"
                     />
 
         </LinearLayout>
