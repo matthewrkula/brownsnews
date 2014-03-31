@@ -1,6 +1,7 @@
 package com.mattkula.brownsnews;
 
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -15,6 +16,8 @@ import com.mattkula.brownsnews.sources.NewsSourceManager;
 public class SelectSourcesActivity extends FragmentActivity {
 
     ListView listView;
+    GridView gridView;
+
     NewsSource[] sources = NewsSourceManager.sources;
 
     @Override
@@ -27,9 +30,14 @@ public class SelectSourcesActivity extends FragmentActivity {
         getActionBar().setTitle("Sources");
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_settings);
-        listView = (ListView)findViewById(R.id.settings_listview);
-        listView.setOnItemClickListener(clickListener);
-        listView.setAdapter(menuAdapter);
+//        listView = (ListView)findViewById(R.id.settings_listview);
+//        listView.setOnItemClickListener(clickListener);
+//        listView.setAdapter(menuAdapter);
+
+        gridView = (GridView)findViewById(R.id.settings_gridlayout);
+        gridView.setOnItemClickListener(clickListener);
+        gridView.setNumColumns(2);
+        gridView.setAdapter(menuAdapter);
     }
 
     @Override
@@ -56,7 +64,7 @@ public class SelectSourcesActivity extends FragmentActivity {
             NewsSource source = sources[i];
             Prefs.setValueForKey(SelectSourcesActivity.this, source.getName(),
                     !Prefs.isNewsSourceSelected(SelectSourcesActivity.this, source));
-            listView.setAdapter(menuAdapter);
+            gridView.setAdapter(menuAdapter);
         }
     };
 
@@ -80,15 +88,18 @@ public class SelectSourcesActivity extends FragmentActivity {
         public View getView(int i, View view, ViewGroup viewGroup) {
             View v = view;
             if(v == null){
-                v = View.inflate(getApplicationContext(), R.layout.menu_item_sliding_menu, null);
+                v = View.inflate(getApplicationContext(), R.layout.grid_item_news_source, null);
             }
             NewsSource s = (NewsSource)getItem(i);
 
-            ((TextView)v.findViewById(R.id.item_name)).setText(s.getName());
+            ((TextView)v.findViewById(R.id.grid_text)).setText(s.getName());
 
-            ImageView checkbox = (ImageView)v.findViewById(R.id.item_check);
-            if(Prefs.isNewsSourceSelected(getApplicationContext(), s)){
-                checkbox.setVisibility(View.VISIBLE);
+            ImageView bg = (ImageView)v.findViewById(R.id.grid_image);
+            bg.setImageDrawable(getResources().getDrawable(R.drawable.browns_dog));
+
+            if(!Prefs.isNewsSourceSelected(getApplicationContext(), s)){
+//                checkbox.setVisibility(View.VISIBLE);
+                v.setAlpha(0.5f);
             }
 
             return v;
