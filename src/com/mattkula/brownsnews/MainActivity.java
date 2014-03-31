@@ -2,6 +2,7 @@ package com.mattkula.brownsnews;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -90,6 +91,8 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         menu = (ListView)findViewById(R.id.sliding_menu);
         menu.setAdapter(menuAdapter);
+        menu.setOnItemClickListener(menuItemClickListener);
+
         requestQueue = Volley.newRequestQueue(this);
 
         loadArticles();
@@ -167,15 +170,20 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         loadArticles();
     }
 
+    private String[] menuItems = new String[]{
+            "News",
+            "Schedule"
+    };
+
     private BaseAdapter menuAdapter = new BaseAdapter() {
         @Override
         public int getCount() {
-            return 2;
+            return menuItems.length;
         }
 
         @Override
         public Object getItem(int i) {
-            return new String[]{"News", "Schedule"}[i];
+            return menuItems[i];
         }
 
         @Override
@@ -194,6 +202,18 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
             ((TextView)v.findViewById(R.id.item_name)).setText(s);
 
             return v;
+        }
+    };
+
+    private AdapterView.OnItemClickListener menuItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            switch (i){
+                case 1:
+                    Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
+                    startActivity(intent);
+                    break;
+            }
         }
     };
 }
