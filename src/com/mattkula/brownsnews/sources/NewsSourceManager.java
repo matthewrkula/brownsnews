@@ -46,7 +46,6 @@ public class NewsSourceManager {
     public void addToArticles(ArrayList<Article> newArticles){
         this.articles.addAll(newArticles);
         counter++;
-        Log.e("ASDF", "counter " + counter);
         if(counter == numOfSources){
             Collections.sort(this.articles);
             listener.onArticlesDownloaded(this.articles);

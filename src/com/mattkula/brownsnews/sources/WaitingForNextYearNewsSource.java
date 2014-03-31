@@ -6,6 +6,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mattkula.brownsnews.MyApplication;
+import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.data.Article;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,11 @@ public class WaitingForNextYearNewsSource implements NewsSource{
     @Override
     public String getName() {
         return "Waiting for Next Year";
+    }
+
+    @Override
+    public int getImageId() {
+        return R.drawable.waiting_for_next_year;
     }
 
     @Override

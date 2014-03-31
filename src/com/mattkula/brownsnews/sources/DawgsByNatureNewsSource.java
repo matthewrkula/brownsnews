@@ -6,6 +6,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mattkula.brownsnews.MyApplication;
+import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.data.Article;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +23,11 @@ public class DawgsByNatureNewsSource implements NewsSource {
     @Override
     public String getName() {
         return "Dawgs By Nature";
+    }
+
+    @Override
+    public int getImageId() {
+        return R.drawable.dawgs_by_nature;
     }
 
     @Override

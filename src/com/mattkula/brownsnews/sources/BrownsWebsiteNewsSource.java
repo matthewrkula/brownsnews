@@ -6,6 +6,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mattkula.brownsnews.MyApplication;
+import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.data.Article;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +21,12 @@ public class BrownsWebsiteNewsSource implements NewsSource{
 
     @Override
     public String getName() {
-        return "ClevelandBrowns.com";
+        return "Cleveland Browns Website";
+    }
+
+    @Override
+    public int getImageId() {
+        return R.drawable.clevelandbrowns;
     }
 
     @Override

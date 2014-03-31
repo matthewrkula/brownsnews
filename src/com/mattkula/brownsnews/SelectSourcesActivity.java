@@ -62,9 +62,9 @@ public class SelectSourcesActivity extends FragmentActivity {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             NewsSource source = sources[i];
-            Prefs.setValueForKey(SelectSourcesActivity.this, source.getName(),
-                    !Prefs.isNewsSourceSelected(SelectSourcesActivity.this, source));
-            gridView.setAdapter(menuAdapter);
+            boolean isSelected = Prefs.isNewsSourceSelected(SelectSourcesActivity.this, source);
+            view.animate().alpha(isSelected ? .3f : 1f);
+            Prefs.setValueForKey(SelectSourcesActivity.this, source.getName(), !isSelected);
         }
     };
 
@@ -95,11 +95,12 @@ public class SelectSourcesActivity extends FragmentActivity {
             ((TextView)v.findViewById(R.id.grid_text)).setText(s.getName());
 
             ImageView bg = (ImageView)v.findViewById(R.id.grid_image);
-            bg.setImageDrawable(getResources().getDrawable(R.drawable.browns_dog));
+            bg.setImageDrawable(getResources().getDrawable(s.getImageId()));
 
             if(!Prefs.isNewsSourceSelected(getApplicationContext(), s)){
-//                checkbox.setVisibility(View.VISIBLE);
-                v.setAlpha(0.5f);
+                v.setAlpha(0.3f);
+            } else {
+                v.setAlpha(1f);
             }
 
             return v;

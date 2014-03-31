@@ -2,6 +2,7 @@ package com.mattkula.brownsnews;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import com.mattkula.brownsnews.sources.NewsSource;
 
 /**
@@ -27,6 +28,7 @@ public class Prefs {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
         editor.commit();
+        Log.v("ASDF", key + " set to " + value);
     }
 
     public static void setValueForKey(Context c, String key, boolean value){
@@ -34,6 +36,7 @@ public class Prefs {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(key, value);
         editor.commit();
+        Log.v("ASDF", key + " set to " + (value ? "true" : "false"));
     }
 
 }

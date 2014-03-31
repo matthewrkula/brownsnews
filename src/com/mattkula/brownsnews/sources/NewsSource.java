@@ -9,4 +9,6 @@ public interface NewsSource {
 
     public String getName();
 
+    public int getImageId();
+
 }
