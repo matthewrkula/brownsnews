@@ -15,7 +15,6 @@ import com.mattkula.brownsnews.sources.NewsSourceManager;
  */
 public class SelectSourcesActivity extends FragmentActivity {
 
-    ListView listView;
     GridView gridView;
 
     NewsSource[] sources = NewsSourceManager.sources;
@@ -30,9 +29,6 @@ public class SelectSourcesActivity extends FragmentActivity {
         getActionBar().setTitle("Sources");
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_settings);
-//        listView = (ListView)findViewById(R.id.settings_listview);
-//        listView.setOnItemClickListener(clickListener);
-//        listView.setAdapter(menuAdapter);
 
         gridView = (GridView)findViewById(R.id.settings_gridlayout);
         gridView.setOnItemClickListener(clickListener);

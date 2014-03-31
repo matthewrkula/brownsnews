@@ -28,7 +28,7 @@ public class Prefs {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
         editor.commit();
-        Log.v("ASDF", key + " set to " + value);
+        Log.v("prefs", key + " set to " + value);
     }
 
     public static void setValueForKey(Context c, String key, boolean value){
@@ -36,7 +36,7 @@ public class Prefs {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(key, value);
         editor.commit();
-        Log.v("ASDF", key + " set to " + (value ? "true" : "false"));
+        Log.v("prefs", key + " set to " + (value ? "true" : "false"));
     }
 
 }
