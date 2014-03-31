@@ -6,19 +6,20 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
+import android.view.*;
 import android.widget.*;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.mattkula.brownsnews.data.Article;
 import com.mattkula.brownsnews.fragments.ArticleViewPagerFragment;
+import com.mattkula.brownsnews.fragments.ScheduleFragment;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
 import com.mattkula.brownsnews.fragments.ArticleFragment;
 import com.mattkula.brownsnews.views.LoadingView;
@@ -31,7 +32,6 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     RequestQueue requestQueue;
     ArrayList<Article> articles;
 
-//    ViewPager viewPager;
     LoadingView loadingView;
     ImageView tutorialArrow;
     ImageView tutorialArrowDown;
@@ -39,6 +39,10 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     ListView menu;
 
     ArticleViewPagerFragment viewPagerFragment;
+    ScheduleFragment scheduleFragment;
+    DrawerLayout drawerLayout;
+
+    int currentFragmentIndex = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,10 +53,13 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         TextView yourTextView = (TextView) findViewById(titleId);
         yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
 
-//        viewPager = (ViewPager)findViewById(R.id.view_pager);
-//        viewPager.setPageTransformer(false, pageTransformer);
+        viewPagerFragment = ArticleViewPagerFragment.newInstance(null);
+        scheduleFragment = new ScheduleFragment();
 
-        viewPagerFragment = (ArticleViewPagerFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_view_pager);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, viewPagerFragment)
+                .commit();
+        getSupportFragmentManager().executePendingTransactions();
 
         loadingView = (LoadingView)findViewById(R.id.loading_view);
         tutorialView = findViewById(R.id.tutorial_view);
@@ -90,6 +97,8 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         menu = (ListView)findViewById(R.id.sliding_menu);
         menu.setAdapter(menuAdapter);
         menu.setOnItemClickListener(menuItemClickListener);
+
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -193,12 +202,37 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     private AdapterView.OnItemClickListener menuItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            drawerLayout.closeDrawer(Gravity.LEFT);
+
+            if(currentFragmentIndex == i) return;
+            currentFragmentIndex = i;
+
             switch (i){
+                case 0:
+                    viewPagerFragment = ArticleViewPagerFragment.newInstance(MainActivity.this.articles);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, viewPagerFragment)
+                            .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
+                            .commit();
+                    break;
                 case 1:
-                    Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
-                    startActivity(intent);
+                    scheduleFragment = new ScheduleFragment();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, scheduleFragment)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .commit();
+                    getSupportFragmentManager().executePendingTransactions();
                     break;
             }
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        if(getSupportFragmentManager().getBackStackEntryCount() > 0){
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

@@ -18,6 +18,7 @@
             android:layout_height="0dip"
             android:background="@color/browns_brown"
             android:layout_weight="2">
+
     <com.mattkula.brownsnews.views.NotifyingScrollView
             android:id="@+id/scrollview"
             android:layout_width="match_parent"
