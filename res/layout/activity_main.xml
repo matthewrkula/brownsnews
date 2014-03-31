@@ -16,11 +16,65 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+            android:id="@+id/tutorial_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:alpha="0"
+            android:background="#88000000">
+
+        <View
+              android:id="@+id/tutorial_anchor"
+              android:layout_width="0dp"
+              android:layout_height="0dp"
+              android:layout_centerInParent="true"/>
+
+        <ImageView
+                android:id="@+id/tutorial_arrow"
+                android:layout_width="41dp" android:layout_height="15dp"
+                android:layout_centerInParent="true"
+                android:translationY="-20dp"
+                android:rotation="180"
+                android:src="@drawable/arrow"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tutorial_anchor"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="30dp"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                android:text="Swipe for more articles"/>
+
+        <TextView
+                android:id="@+id/tutorial_text_pull"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tutorial_anchor"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="30dp"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                android:text="Pull down to refresh articles"/>
+
+        <ImageView
+                android:id="@+id/tutorial_arrow_pull"
+                android:layout_width="41dp" android:layout_height="15dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/tutorial_text_pull"
+                android:layout_marginTop="8dp"
+                android:rotation="90"
+                android:src="@drawable/arrow"/>
+
+    </RelativeLayout>
+
     <com.mattkula.brownsnews.views.LoadingView
             android:id="@+id/loading_view"
             android:layout_width="300dip"
             android:layout_height="300dip"
-            android:src="@drawable/logo"
+            android:src="@drawable/loading"
             android:layout_centerInParent="true"/>
 
 </RelativeLayout>

@@ -1,39 +1,45 @@
 package com.mattkula.brownsnews;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.mattkula.brownsnews.data.Article;
-import com.mattkula.brownsnews.data.NewsSourceManager;
+import com.mattkula.brownsnews.sources.NewsSourceManager;
 import com.mattkula.brownsnews.fragments.ArticleFragment;
 import com.mattkula.brownsnews.views.LoadingView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements NewsSourceManager.OnArticlesDownloadedListener{
+public class MainActivity extends FragmentActivity implements NewsSourceManager.OnArticlesDownloadedListener, SwipeRefreshLayout.OnRefreshListener{
 
     RequestQueue requestQueue;
     ArrayList<Article> articles;
 
     ViewPager viewPager;
-
     LoadingView loadingView;
+    ImageView tutorialArrow;
+    ImageView tutorialArrowDown;
+    View tutorialView;
 
     ViewPager.PageTransformer pageTransformer = new ViewPager.PageTransformer() {
         @Override
         public void transformPage(View view, float v) {
             LinearLayout layout = (LinearLayout)view.findViewById(R.id.content);
-            layout.setTranslationX(300*v);
+            layout.setTranslationX(600*v);
         }
     };
 
@@ -49,6 +55,47 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         viewPager = (ViewPager)findViewById(R.id.view_pager);
         viewPager.setPageTransformer(false, pageTransformer);
         loadingView = (LoadingView)findViewById(R.id.loading_view);
+        tutorialView = findViewById(R.id.tutorial_view);
+        tutorialView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                view.animate().alpha(0).setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        view.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
+            }
+        });
+
+        tutorialArrow = (ImageView)findViewById(R.id.tutorial_arrow);
+        tutorialArrowDown = (ImageView)findViewById(R.id.tutorial_arrow_pull);
+        ValueAnimator animator = ValueAnimator.ofInt(50, -50);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                tutorialArrow.setTranslationX((Integer)valueAnimator.getAnimatedValue());
+                tutorialArrowDown.setTranslationY(-(Integer)valueAnimator.getAnimatedValue());
+            }
+        });
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setDuration(600);
+        animator.start();
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -66,6 +113,13 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         this.articles = articles;
         loadingView.dismiss();
         refreshViewPager();
+
+        if(Prefs.isFirstTime(this)){
+            tutorialView.setVisibility(View.VISIBLE);
+            tutorialView.animate().alpha(1);
+        }
+
+        Prefs.setValueForKey(this, Prefs.TAG_IS_FIRST_TIME, false);
     }
 
     private void refreshViewPager(){
@@ -99,5 +153,10 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRefresh() {
+        loadArticles();
     }
 }

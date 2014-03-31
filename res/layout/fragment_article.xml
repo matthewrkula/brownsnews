@@ -12,11 +12,16 @@
             android:layout_height="0dip"
             android:layout_weight="1"/>
 
+    <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:background="@color/browns_brown"
+            android:layout_weight="2">
     <com.mattkula.brownsnews.views.NotifyingScrollView
             android:id="@+id/scrollview"
             android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="2"
+            android:layout_height="match_parent"
             android:scrollbars="none"
             android:background="@color/browns_brown">
 
@@ -46,16 +51,27 @@
                     android:layout_marginBottom="8dip"
                     />
 
+            <TextView
+                    android:id="@+id/article_source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="-4dip"
+                    android:layout_marginLeft="8dip"
+                    android:layout_marginBottom="8dip"
+                    />
 
             <WebView
                     android:id="@+id/article_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/browns_brown"
+                    android:scrollbars="none"
                     android:alpha="0"
                     />
 
         </LinearLayout>
     </com.mattkula.brownsnews.views.NotifyingScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

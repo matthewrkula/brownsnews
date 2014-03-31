@@ -1,4 +1,4 @@
-package com.mattkula.brownsnews.data;
+package com.mattkula.brownsnews.sources;
 
 /**
  * Created by matt on 3/27/14.

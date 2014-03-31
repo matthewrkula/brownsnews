@@ -1,4 +1,4 @@
-package com.mattkula.brownsnews.data;
+package com.mattkula.brownsnews.sources;
 
 import android.util.Log;
 import com.android.volley.Request;
@@ -6,6 +6,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mattkula.brownsnews.MyApplication;
+import com.mattkula.brownsnews.data.Article;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,16 +14,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by matt on 3/27/14.
+ * Created by matt on 3/28/14.
  */
-public class DawgPoundNationNewsSource implements NewsSource {
+public class WaitingForNextYearNewsSource implements NewsSource{
+
+    private String[] allowedCategories = new String[]{
+            "browns", "football", "nfl", "hoyer", "pettine", "cleveland browns"
+    };
 
     @Override
     public void getLatestArticles(final NewsSourceManager manager) {
         final ArrayList<Article> articles = new ArrayList<Article>();
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                "https://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://dawgpoundnation.com/feed/&num=20",
+        Request request = new JsonObjectRequest(Request.Method.GET,
+                "https://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://waitingfornextyear.com/feed/&num=20",
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -33,7 +38,15 @@ public class DawgPoundNationNewsSource implements NewsSource {
                     for(int i =0; i < entries.length(); i++){
                         JSONObject entry = entries.getJSONObject(i);
                         Article article = Article.createFromJsonObject(entry);
-                        articles.add(article);
+                        article.newsSource = "Waiting For Next Year";
+                        article.content = article.content.replaceAll("___________________________________________", "");
+
+                        for(int j=0; j < allowedCategories.length; j++){
+                            if(article.categories.contains(allowedCategories[j])){
+                                articles.add(article);
+                                break;
+                            }
+                        }
                     }
 
                     manager.addToArticles(articles);
