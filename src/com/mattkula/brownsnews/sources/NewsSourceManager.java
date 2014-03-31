@@ -18,6 +18,7 @@ public class NewsSourceManager {
             new WaitingForNextYearNewsSource(),
             new ESPNNewsSource(),
             new BrownsWebsiteNewsSource(),
+            new AkronBeaconNewsSource(),
     };
 
     ArrayList<Article> articles;

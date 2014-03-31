@@ -1,5 +1,6 @@
 package com.mattkula.brownsnews.sources;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -15,18 +16,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by matt on 3/30/14.
+ * Created by matt on 3/31/14.
  */
-public class BrownsWebsiteNewsSource implements NewsSource {
+public class AkronBeaconNewsSource implements NewsSource{
 
     @Override
     public String getName() {
-        return "Cleveland Browns Website";
+        return "Akron Beacon Journal";
     }
 
     @Override
     public int getImageId() {
-        return R.drawable.clevelandbrowns;
+        return R.drawable.akron_beacon_journal;
     }
 
     @Override
@@ -34,8 +35,9 @@ public class BrownsWebsiteNewsSource implements NewsSource {
         final ArrayList<Article> articles = new ArrayList<Article>();
 
         Request request = new JsonObjectRequest(Request.Method.GET,
-                "http://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://www.clevelandbrowns.com/cda-web/rss-module.htm?tagName=News&num=20",
+                "http://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://www.ohio.com/cmlink/1.215556&num=8",
                 null, new Response.Listener<JSONObject>() {
+
             @Override
             public void onResponse(JSONObject jsonObject) {
                 try {
@@ -58,7 +60,7 @@ public class BrownsWebsiteNewsSource implements NewsSource {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.e("ASDF", "error with ESPN");
+                Log.e("ASDF", "error with Akron Beacon");
             }
         });
 

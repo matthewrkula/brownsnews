@@ -156,6 +156,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
                 loadArticles();
                 return true;
             case R.id.menu_settings:
+                viewPagerFragment.fadeOut();
                 Intent intent = new Intent(this, SelectSourcesActivity.class);
                 startActivityForResult(intent, 1);
                 return true;

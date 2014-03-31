@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.*;
 import android.webkit.WebSettings;
@@ -75,7 +76,9 @@ public class ArticleFragment extends Fragment {
                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(article.link));
                 startActivity(i);
             }
+
         });
+
         textAuthor.setText("By: " + article.author + " on " + article.publishedDate.toLocaleString());
         textSource.setText("Via: " + article.newsSource);
 
