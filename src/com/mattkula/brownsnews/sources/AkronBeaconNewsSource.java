@@ -48,6 +48,7 @@ public class AkronBeaconNewsSource implements NewsSource{
                         JSONObject entry = entries.getJSONObject(i);
                         Article article = Article.createFromJsonObject(entry);
                         article.newsSource = getName();
+                        article.author = "ABJ";
                         articles.add(article);
                     }
 
