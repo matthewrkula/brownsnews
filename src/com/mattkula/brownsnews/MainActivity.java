@@ -18,6 +18,7 @@ import android.widget.*;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.mattkula.brownsnews.data.Article;
+import com.mattkula.brownsnews.fragments.ArticleViewPagerFragment;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
 import com.mattkula.brownsnews.fragments.ArticleFragment;
 import com.mattkula.brownsnews.views.LoadingView;
@@ -30,20 +31,14 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     RequestQueue requestQueue;
     ArrayList<Article> articles;
 
-    ViewPager viewPager;
+//    ViewPager viewPager;
     LoadingView loadingView;
     ImageView tutorialArrow;
     ImageView tutorialArrowDown;
     View tutorialView;
     ListView menu;
 
-    ViewPager.PageTransformer pageTransformer = new ViewPager.PageTransformer() {
-        @Override
-        public void transformPage(View view, float v) {
-            LinearLayout layout = (LinearLayout)view.findViewById(R.id.content);
-            layout.setTranslationX(600*v);
-        }
-    };
+    ArticleViewPagerFragment viewPagerFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,8 +49,11 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         TextView yourTextView = (TextView) findViewById(titleId);
         yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
 
-        viewPager = (ViewPager)findViewById(R.id.view_pager);
-        viewPager.setPageTransformer(false, pageTransformer);
+//        viewPager = (ViewPager)findViewById(R.id.view_pager);
+//        viewPager.setPageTransformer(false, pageTransformer);
+
+        viewPagerFragment = (ArticleViewPagerFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_view_pager);
+
         loadingView = (LoadingView)findViewById(R.id.loading_view);
         tutorialView = findViewById(R.id.tutorial_view);
         tutorialView.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +111,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     }
 
     public void loadArticles() {
-        viewPager.animate().alpha(0);
+        viewPagerFragment.fadeOut();
         loadingView.show();
         new NewsSourceManager().getAllArticles(this);
     }
@@ -133,20 +131,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     }
 
     private void refreshViewPager(){
-        viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int i) {
-                ArticleFragment articleFragment = ArticleFragment.newInstance(articles.get(i));
-                return articleFragment;
-            }
-
-            @Override
-            public int getCount() {
-                return articles.size();
-            }
-        });
-
-        viewPager.animate().alpha(1);
+        viewPagerFragment.loadArticles(this.articles);
     }
 
     @Override

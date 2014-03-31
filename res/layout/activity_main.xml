@@ -12,11 +12,10 @@
                   android:layout_width="fill_parent"
                   android:layout_height="fill_parent">
     
-            <android.support.v4.view.ViewPager
-                android:id="@+id/view_pager"
-                android:alpha="0"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+            <fragment android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:id="@+id/fragment_view_pager"
+                      android:name="com.mattkula.brownsnews.fragments.ArticleViewPagerFragment"/>
     
         </LinearLayout>
     
