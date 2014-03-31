@@ -12,9 +12,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.*;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.mattkula.brownsnews.data.Article;
@@ -23,6 +22,7 @@ import com.mattkula.brownsnews.fragments.ArticleFragment;
 import com.mattkula.brownsnews.views.LoadingView;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 public class MainActivity extends FragmentActivity implements NewsSourceManager.OnArticlesDownloadedListener, SwipeRefreshLayout.OnRefreshListener{
 
@@ -34,6 +34,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     ImageView tutorialArrow;
     ImageView tutorialArrowDown;
     View tutorialView;
+    ListView menu;
 
     ViewPager.PageTransformer pageTransformer = new ViewPager.PageTransformer() {
         @Override
@@ -85,6 +86,16 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         tutorialArrow = (ImageView)findViewById(R.id.tutorial_arrow);
         tutorialArrowDown = (ImageView)findViewById(R.id.tutorial_arrow_pull);
+        setUpArrowAnimations();
+
+        menu = (ListView)findViewById(R.id.sliding_menu);
+        menu.setAdapter(menuAdapter);
+        requestQueue = Volley.newRequestQueue(this);
+
+        loadArticles();
+    }
+
+    private void setUpArrowAnimations(){
         ValueAnimator animator = ValueAnimator.ofInt(50, -50);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -96,10 +107,6 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setDuration(600);
         animator.start();
-
-        requestQueue = Volley.newRequestQueue(this);
-
-        loadArticles();
     }
 
     public void loadArticles() {
@@ -159,4 +166,34 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     public void onRefresh() {
         loadArticles();
     }
+
+    private BaseAdapter menuAdapter = new BaseAdapter() {
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return new String[]{"News", "Schedule"}[i];
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View v = view;
+            if(v == null){
+                v = View.inflate(getApplicationContext(), R.layout.menu_item_sliding_menu, null);
+            }
+            String s = (String)getItem(i);
+
+            ((TextView)v.findViewById(R.id.item_name)).setText(s);
+
+            return v;
+        }
+    };
 }
