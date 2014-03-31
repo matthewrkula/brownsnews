@@ -103,4 +103,11 @@ public class SelectSourcesActivity extends FragmentActivity {
             return v;
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+        super.onBackPressed();
+    }
 }
