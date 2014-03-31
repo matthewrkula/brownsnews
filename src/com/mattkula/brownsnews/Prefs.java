@@ -2,6 +2,7 @@ package com.mattkula.brownsnews;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.mattkula.brownsnews.sources.NewsSource;
 
 /**
  * Created by matt on 3/30/14.
@@ -14,6 +15,11 @@ public class Prefs {
         SharedPreferences preferences = c.getSharedPreferences(TAG, Context.MODE_PRIVATE);
         boolean isFirstTime = preferences.getBoolean(TAG_IS_FIRST_TIME, true);
         return isFirstTime;
+    }
+
+    public static boolean isNewsSourceSelected(Context c, NewsSource source){
+        SharedPreferences preferences = c.getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        return preferences.getBoolean(source.getName(), true);
     }
 
     public static void setValueForKey(Context c, String key, String value){

@@ -7,4 +7,6 @@ public interface NewsSource {
 
     public void getLatestArticles(final NewsSourceManager manager);
 
+    public String getName();
+
 }

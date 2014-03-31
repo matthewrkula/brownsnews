@@ -19,6 +19,11 @@ import java.util.ArrayList;
 public class DawgPoundNationNewsSource implements NewsSource {
 
     @Override
+    public String getName() {
+        return "Dawg Pound Nation";
+    }
+
+    @Override
     public void getLatestArticles(final NewsSourceManager manager) {
         final ArrayList<Article> articles = new ArrayList<Article>();
 
@@ -34,7 +39,7 @@ public class DawgPoundNationNewsSource implements NewsSource {
                     for(int i =0; i < entries.length(); i++){
                         JSONObject entry = entries.getJSONObject(i);
                         Article article = Article.createFromJsonObject(entry);
-                        article.newsSource = "Dawg Pound Nation";
+                        article.newsSource = getName();
                         articles.add(article);
                     }
 

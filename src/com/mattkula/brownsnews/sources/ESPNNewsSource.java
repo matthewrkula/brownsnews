@@ -14,17 +14,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by matt on 3/28/14.
+ * Created by matt on 3/30/14.
  */
-public class WaitingForNextYearNewsSource implements NewsSource{
-
-    private String[] allowedCategories = new String[]{
-            "browns", "football", "nfl", "hoyer", "pettine", "cleveland browns"
-    };
+public class ESPNNewsSource implements NewsSource{
 
     @Override
     public String getName() {
-        return "Waiting for Next Year";
+        return "ESPN";
     }
 
     @Override
@@ -32,7 +28,7 @@ public class WaitingForNextYearNewsSource implements NewsSource{
         final ArrayList<Article> articles = new ArrayList<Article>();
 
         Request request = new JsonObjectRequest(Request.Method.GET,
-                "https://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://waitingfornextyear.com/feed/&num=20",
+                "http://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://espn.go.com/blog/feed?blog=cleveland-browns&num=20",
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -43,15 +39,10 @@ public class WaitingForNextYearNewsSource implements NewsSource{
                     for(int i =0; i < entries.length(); i++){
                         JSONObject entry = entries.getJSONObject(i);
                         Article article = Article.createFromJsonObject(entry);
+                        article.content = article.content.replaceAll("</?a(|\\s+[^>]+)>", "");
+                        article.imageUrl = "none";
                         article.newsSource = getName();
-                        article.content = article.content.replaceAll("___________________________________________", "");
-
-                        for(int j=0; j < allowedCategories.length; j++){
-                            if(article.categories.contains(allowedCategories[j])){
-                                articles.add(article);
-                                break;
-                            }
-                        }
+                        articles.add(article);
                     }
 
                     manager.addToArticles(articles);
@@ -63,7 +54,7 @@ public class WaitingForNextYearNewsSource implements NewsSource{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.e("ASDF", "error with dawgs by nature");
+                Log.e("ASDF", "error with ESPN");
             }
         });
 

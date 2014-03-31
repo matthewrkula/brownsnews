@@ -76,8 +76,8 @@ public class ArticleFragment extends Fragment {
                 startActivity(i);
             }
         });
-        textAuthor.setText("By: " + article.author);
-        textSource.setText("From: " + article.newsSource);
+        textAuthor.setText("By: " + article.author + " on " + article.publishedDate.toLocaleString());
+        textSource.setText("Via: " + article.newsSource);
 
         textContent.getSettings().setUseWideViewPort(false);
         textContent.setBackgroundColor(Color.argb(1, 0, 0, 0));
@@ -92,7 +92,8 @@ public class ArticleFragment extends Fragment {
                     .centerCrop()
                     .into(articleImage);
         } else {
-            articleImage.setImageDrawable((getResources().getDrawable(R.drawable.browns_dog)));
+            double d = Math.random();
+            articleImage.setImageDrawable((getResources().getDrawable(d > 0.5 ? R.drawable.browns_dog : R.drawable.brownie)));
             articleImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
 

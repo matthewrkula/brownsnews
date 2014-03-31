@@ -122,7 +122,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     public void loadArticles() {
         viewPagerFragment.fadeOut();
         loadingView.show();
-        new NewsSourceManager().getAllArticles(this);
+        new NewsSourceManager().getAllArticles(this, this);
     }
 
     @Override
@@ -155,8 +155,24 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
             case R.id.menu_refresh:
                 loadArticles();
                 return true;
+            case R.id.menu_settings:
+                Intent intent = new Intent(this, SelectSourcesActivity.class);
+                startActivityForResult(intent, 1);
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+                if(viewPagerFragment.isVisible()){
+                    loadArticles();
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -226,13 +242,4 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
             }
         }
     };
-
-    @Override
-    public void onBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount() > 0){
-            getSupportFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-    }
 }
