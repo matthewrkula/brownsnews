@@ -107,15 +107,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         requestQueue = Volley.newRequestQueue(this);
 
-        Log.v(Prefs.LOG_UPDATE, "getting ready for update");
-        Intent i = new Intent("com.mattkula.intent.UPDATE_ARTICLES");
-        PendingIntent intent = PendingIntent.getBroadcast(this, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.SECOND, 5);
-
-        AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        manager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), intent);
+        prepareUpdateServices();
 
         loadArticles();
     }
@@ -132,6 +124,19 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setDuration(600);
         animator.start();
+    }
+
+    private void prepareUpdateServices(){
+        Log.v(Prefs.LOG_UPDATE, "getting ready for update");
+        Intent intent = new Intent("com.mattkula.intent.UPDATE_ARTICLES");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.HOUR, 1);
+
+        AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        manager.cancel(pendingIntent);
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60*60*1000, pendingIntent);
     }
 
     public void loadArticles() {
