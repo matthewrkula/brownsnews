@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
@@ -20,6 +21,7 @@ import android.view.*;
 import android.widget.*;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.mattkula.brownsnews.background.UpdateManager;
 import com.mattkula.brownsnews.data.Article;
 import com.mattkula.brownsnews.fragments.ArticleViewPagerFragment;
 import com.mattkula.brownsnews.fragments.ScheduleFragment;
@@ -107,7 +109,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         requestQueue = Volley.newRequestQueue(this);
 
-        prepareUpdateServices();
+        UpdateManager.refreshUpdateCount(this);
 
         loadArticles();
     }
@@ -124,19 +126,6 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setDuration(600);
         animator.start();
-    }
-
-    private void prepareUpdateServices(){
-        Log.v(Prefs.LOG_UPDATE, "getting ready for update");
-        Intent intent = new Intent("com.mattkula.intent.UPDATE_ARTICLES");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.HOUR, 1);
-
-        AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        manager.cancel(pendingIntent);
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60*60*1000, pendingIntent);
     }
 
     public void loadArticles() {
@@ -157,6 +146,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         }
 
         Prefs.setValueForKey(this, Prefs.TAG_IS_FIRST_TIME, false);
+        Prefs.setValueForKey(this, Prefs.TAG_UPDATE_LAST_LINK, articles.get(0).link);
     }
 
     @Override
@@ -167,14 +157,19 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()){
             case R.id.menu_refresh:
                 loadArticles();
                 return true;
-            case R.id.menu_settings:
+            case R.id.menu_sources:
                 viewPagerFragment.fadeOut();
-                Intent intent = new Intent(this, SelectSourcesActivity.class);
+                intent = new Intent(this, SelectSourcesActivity.class);
                 startActivityForResult(intent, 1);
+                return true;
+            case R.id.menu_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

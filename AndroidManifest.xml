@@ -23,6 +23,7 @@
         </activity>
 
         <activity android:name=".SelectSourcesActivity"/>
+        <activity android:name=".SettingsActivity"/>
 
         <receiver android:name=".background.UpdateBroadcastReceiver">
             <intent-filter>

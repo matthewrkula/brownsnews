@@ -1,10 +1,8 @@
 package com.mattkula.brownsnews;
 
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.mattkula.brownsnews.sources.NewsSource;
@@ -28,7 +26,7 @@ public class SelectSourcesActivity extends FragmentActivity {
         yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
         getActionBar().setTitle("Sources");
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_sources);
 
         gridView = (GridView)findViewById(R.id.settings_gridlayout);
         gridView.setOnItemClickListener(clickListener);

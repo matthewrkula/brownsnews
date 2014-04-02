@@ -26,6 +26,9 @@ import com.mattkula.brownsnews.data.Article;
 import com.mattkula.brownsnews.views.NotifyingScrollView;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.Date;
+
 
 /**
  * Created by matt on 3/27/14.
@@ -107,7 +110,7 @@ public class ArticleFragment extends Fragment {
 
     private String getStyle(String content){
         String text = "<html><head>"
-                + "<style type=\"text/css\">body{color: #fff; font-family: 'Serif'; overflow: hidden; width: 90%;}"
+                + "<style type=\"text/css\">body{color: #fff; font-family: 'Serif'; overflow: hidden; width: 90%;} "
                 + " a:link {color:#E34912}"
                 + "</style></head>"
                 + "<body>"
