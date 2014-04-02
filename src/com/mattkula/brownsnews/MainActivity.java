@@ -2,6 +2,9 @@ package com.mattkula.brownsnews;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -23,8 +26,10 @@ import com.mattkula.brownsnews.fragments.ScheduleFragment;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
 import com.mattkula.brownsnews.fragments.ArticleFragment;
 import com.mattkula.brownsnews.views.LoadingView;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.zip.Inflater;
 
 public class MainActivity extends FragmentActivity implements NewsSourceManager.OnArticlesDownloadedListener, SwipeRefreshLayout.OnRefreshListener{
@@ -102,6 +107,16 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         requestQueue = Volley.newRequestQueue(this);
 
+        Log.v(Prefs.LOG_UPDATE, "getting ready for update");
+        Intent i = new Intent("com.mattkula.intent.UPDATE_ARTICLES");
+        PendingIntent intent = PendingIntent.getBroadcast(this, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.SECOND, 5);
+
+        AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        manager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), intent);
+
         loadArticles();
     }
 
@@ -129,7 +144,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     public void onArticlesDownloaded(ArrayList<Article> articles) {
         this.articles = articles;
         loadingView.dismiss();
-        refreshViewPager();
+        viewPagerFragment.loadArticles(this.articles);
 
         if(Prefs.isFirstTime(this)){
             tutorialView.setVisibility(View.VISIBLE);
@@ -137,10 +152,6 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         }
 
         Prefs.setValueForKey(this, Prefs.TAG_IS_FIRST_TIME, false);
-    }
-
-    private void refreshViewPager(){
-        viewPagerFragment.loadArticles(this.articles);
     }
 
     @Override

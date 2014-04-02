@@ -24,6 +24,14 @@
 
         <activity android:name=".SelectSourcesActivity"/>
 
+        <receiver android:name=".background.UpdateBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.mattkula.intent.UPDATE_ARTICLES"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".background.UpdateService"/>
+
     </application>
 
 </manifest>
