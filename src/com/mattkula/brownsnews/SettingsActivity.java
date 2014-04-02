@@ -3,6 +3,7 @@ package com.mattkula.brownsnews;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 import com.mattkula.brownsnews.background.UpdateManager;
 
 import java.util.List;
@@ -36,6 +38,11 @@ public class SettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        int titleId = getResources().getIdentifier("action_bar_title", "id",
+                "android");
+        TextView yourTextView = (TextView) findViewById(titleId);
+        yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
+        getActionBar().setTitle("Settings");
 
         integers = getResources().getIntArray(R.array.notification_duration_value);
         selectedIndex = getSelectedIndex();
@@ -70,7 +77,7 @@ public class SettingsActivity extends Activity {
     private void save(){
         Prefs.setValueForKey(this, Prefs.TAG_NOTIFICATION_ENABLED, notificationsEnabled.isChecked());
         Prefs.setValueForKey(this, Prefs.TAG_NOTIFICATION_INTERVAL, integers[selectedIndex]);
-        UpdateManager.scheduleUpdates(this);
+        UpdateManager.rescheduleUpdates(this);
     }
 
     @Override

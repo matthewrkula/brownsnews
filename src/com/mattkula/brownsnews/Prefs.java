@@ -17,9 +17,7 @@ public class Prefs {
     /** Updating constants **/
     public final static String TAG_NOTIFICATION_ENABLED = "notification_enabled";
     public final static String TAG_NOTIFICATION_INTERVAL = "notification_interval";
-    public final static String TAG_UPDATE_ENABLED = "update_enabled";
     public final static String TAG_UPDATE_STATUS = "update_status";
-    public final static String TAG_UPDATE_INTERVAL = "update_interval";
     public final static String TAG_UPDATE_LAST_LINK = "update_last_link";
     public final static String STATUS_UPDATING = "status_updating";
     public final static String STATUS_NOT_UPDATING = "status_not_updating";

@@ -109,7 +109,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         requestQueue = Volley.newRequestQueue(this);
 
-        UpdateManager.refreshUpdateCount(this);
+        UpdateManager.rescheduleUpdates(this);
 
         loadArticles();
     }

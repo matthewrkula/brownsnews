@@ -2,7 +2,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/select_done"
-          android:title="DONE"
+          android:title="SAVE"
           android:showAsAction="always"/>
 
 </menu>

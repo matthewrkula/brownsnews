@@ -4,45 +4,61 @@
           android:orientation="vertical"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-        android:paddingTop="?android:attr/actionBarSize">
+          android:background="#ffca4f0e"
+          >
 
-    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:src="@drawable/joe_thomas"/>
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="Notifications Enabled"
-                android:textSize="18sp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"/>
 
-        <CheckBox
-                android:id="@+id/checkbox_notifications_enabled"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
+    <LinearLayout android:layout_width="fill_parent"
+             android:orientation="vertical"
+             android:layout_height="wrap_content"
+            android:layout_weight="2">
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
-    </RelativeLayout>
+            <com.mattkula.brownsnews.views.CustomTextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Notifications Enabled"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"/>
 
-    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+            <CheckBox
+                    android:id="@+id/checkbox_notifications_enabled"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="Notification Interval"
-                  android:textSize="18sp"
-                  android:layout_alignParentLeft="true"
-                  android:layout_centerVertical="true"/>
+        </RelativeLayout>
 
-        <Spinner android:id="@+id/spinner_notification_interval" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:entries="@array/notification_duration_names"
-                />
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
-    </RelativeLayout>
+            <com.mattkula.brownsnews.views.CustomTextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:text="Notification Interval"
+                      android:textSize="18sp"
+                      android:textColor="@android:color/white"
+                      android:layout_alignParentLeft="true"
+                      android:layout_centerVertical="true"/>
+
+            <Spinner android:id="@+id/spinner_notification_interval" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:entries="@array/notification_duration_names"
+                    />
+
+        </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
