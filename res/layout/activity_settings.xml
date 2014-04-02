@@ -19,6 +19,7 @@
              android:orientation="vertical"
              android:layout_height="wrap_content"
             android:layout_weight="2">
+
         <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:paddingLeft="10dp"
@@ -26,7 +27,7 @@
 
             <com.mattkula.brownsnews.views.CustomTextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="Notifications Enabled"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textColor="@android:color/white"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>
@@ -47,7 +48,7 @@
 
             <com.mattkula.brownsnews.views.CustomTextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:text="Notification Interval"
-                      android:textSize="18sp"
+                      android:textSize="17sp"
                       android:textColor="@android:color/white"
                       android:layout_alignParentLeft="true"
                       android:layout_centerVertical="true"/>

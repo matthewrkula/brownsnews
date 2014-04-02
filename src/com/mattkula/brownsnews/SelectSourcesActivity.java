@@ -30,7 +30,7 @@ public class SelectSourcesActivity extends FragmentActivity {
 
         gridView = (GridView)findViewById(R.id.settings_gridlayout);
         gridView.setOnItemClickListener(clickListener);
-        gridView.setNumColumns(2);
+        gridView.setNumColumns(3);
         gridView.setAdapter(menuAdapter);
     }
 

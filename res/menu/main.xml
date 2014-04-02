@@ -2,6 +2,11 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/menu_refresh"
+          android:showAsAction="ifRoom"
+          android:icon="@drawable/ic_action_refresh"
+          android:title="Refresh"/>
+
     <item android:id="@+id/menu_sources"
           android:showAsAction="always"
           android:icon="@drawable/ic_action_view_as_grid"
@@ -11,9 +16,4 @@
           android:showAsAction="ifRoom"
           android:icon="@drawable/ic_action_settings"
           android:title="Settings"/>
-
-    <item android:id="@+id/menu_refresh"
-          android:showAsAction="ifRoom"
-          android:icon="@drawable/ic_action_refresh"
-          android:title="Refresh"/>
 </menu>

@@ -19,6 +19,7 @@ public class NewsSourceManager {
             new ESPNNewsSource(),
             new BrownsWebsiteNewsSource(),
             new AkronBeaconNewsSource(),
+            new PlainDealerNewsSource(),
     };
 
     ArrayList<Article> articles;
