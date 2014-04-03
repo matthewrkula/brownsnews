@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -59,21 +60,26 @@ public class UpdateService extends IntentService implements NewsSourceManager.On
 
         Prefs.setValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_LAST_LINK, articles.get(0).link);
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        Notification notification = new Notification.Builder(getApplicationContext())
-                                            .setSmallIcon(R.drawable.logo)
-                                            .setContentTitle("More Browns News!")
-                                            .setContentText(articles.get(0).title)
-                                            .setContentIntent(pendingIntent)
-                                            .getNotification();
-        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-
-        NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
+        sendNotification(getApplicationContext(), articles.get(0).title);
 
         Prefs.setValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_STATUS, Prefs.STATUS_NOT_UPDATING);
+    }
+
+    public static void sendNotification(Context context, String title){
+        Intent intent = new Intent(context, MainActivity.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Notification notification = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle("More Browns News!")
+                .setContentText(title)
+                .setContentIntent(pendingIntent)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(title))
+                .build();
+        notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+
+        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
     }
 }

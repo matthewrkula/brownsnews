@@ -22,6 +22,7 @@ import android.widget.*;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.mattkula.brownsnews.background.UpdateManager;
+import com.mattkula.brownsnews.background.UpdateService;
 import com.mattkula.brownsnews.data.Article;
 import com.mattkula.brownsnews.fragments.ArticleViewPagerFragment;
 import com.mattkula.brownsnews.fragments.ScheduleFragment;
