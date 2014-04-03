@@ -54,6 +54,11 @@ public class NewsSourceManager {
         }
     }
 
+    public void onError(NewsSource source){
+        Log.e("BROWNSERROR", source.getName() + " could not be downloaded.");
+        counter++;
+    }
+
     public interface OnArticlesDownloadedListener {
         public void onArticlesDownloaded(ArrayList<Article> articles);
     }

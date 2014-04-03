@@ -53,12 +53,13 @@ public class DawgPoundNationNewsSource implements NewsSource {
 
                 } catch (JSONException e) {
                     Log.e("ASDF", "json error");
+                    manager.addToArticles(articles);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.e("ASDF", "error with dawgs by nature");
+                manager.onError(DawgPoundNationNewsSource.this);
             }
         });
 
