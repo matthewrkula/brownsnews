@@ -69,6 +69,15 @@ public class ArticleFragment extends Fragment {
 
         });
 
+        final GestureDetector detector = new GestureDetector(gestureListener);
+        articleImage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                detector.onTouchEvent(motionEvent);
+                return true;
+            }
+        });
+
         textAuthor.setText("By: " + article.author + " on " + article.publishedDate.toLocaleString());
         textSource.setText("Via: " + article.newsSource);
 
@@ -106,4 +115,13 @@ public class ArticleFragment extends Fragment {
 
         return text;
     }
+
+    GestureDetector.SimpleOnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener(){
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            Log.e("ASDF", "Double tapped on " + article.title);
+            return super.onDoubleTap(e);
+        }
+    };
+
 }

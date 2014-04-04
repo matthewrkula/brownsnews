@@ -98,4 +98,15 @@ public class Article implements Serializable, Comparable<Article>{
     public String toString() {
         return title + " " + author;
     }
+
+    public static Article generateFakeArticle(){
+        Article a = new Article();
+        a.title = "Fake title";
+        a.link = "http://example.com";
+        a.author = "Matt Kula";
+        a.imageUrl = "none";
+        a.content = "Lorem ipsum yadda lfkjwl";
+        a.publishedDate = new Date(System.currentTimeMillis());
+        return a;
+    }
 }

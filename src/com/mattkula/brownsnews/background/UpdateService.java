@@ -48,19 +48,20 @@ public class UpdateService extends IntentService implements NewsSourceManager.On
     @Override
     public void onArticlesDownloaded() {
         ArrayList<Article> articles = dataSource.getAllArticles(1);
-        if(Prefs.getValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_LAST_LINK, "none").equals(articles.get(0).link)){
+        Article latest = articles.get(0);
+        if(Prefs.getValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_LAST_LINK, "none").equals(latest.link)){
             Log.v(Prefs.LOG_UPDATE, "No new articles.");
             dataSource.close();
             return;
         } else {
             Log.v(Prefs.LOG_UPDATE, "******** Newest Title ********");
-            Log.v(Prefs.LOG_UPDATE, articles.get(0).title);
+            Log.v(Prefs.LOG_UPDATE, latest.title);
             Log.v(Prefs.LOG_UPDATE, "******************************");
         }
 
-        Prefs.setValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_LAST_LINK, articles.get(0).link);
+        Prefs.setValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_LAST_LINK, latest.link);
 
-        sendNotification(getApplicationContext(), articles.get(0).title);
+        sendNotification(getApplicationContext(), latest.title);
 
         dataSource.close();
         Prefs.setValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_STATUS, Prefs.STATUS_NOT_UPDATING);
