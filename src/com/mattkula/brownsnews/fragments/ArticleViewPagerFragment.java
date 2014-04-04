@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.mattkula.brownsnews.R;
-import com.mattkula.brownsnews.data.Article;
+import com.mattkula.brownsnews.database.Article;
 
 import java.util.ArrayList;
 
@@ -65,7 +65,9 @@ public class ArticleViewPagerFragment extends Fragment {
                     return articles.size();
                 }
             });
-        };
+        } else {
+            Log.e("ASDF", "NULLLL");
+        }
 
         if(viewPager != null){
             viewPager.animate().alpha(1);

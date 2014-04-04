@@ -1,33 +1,20 @@
 package com.mattkula.brownsnews.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.*;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.mattkula.brownsnews.MyApplication;
 import com.mattkula.brownsnews.R;
-import com.mattkula.brownsnews.data.Article;
+import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.views.NotifyingScrollView;
 import com.squareup.picasso.Picasso;
-
-import java.util.Calendar;
-import java.util.Date;
 
 
 /**

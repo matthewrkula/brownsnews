@@ -8,18 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.mattkula.brownsnews.MainActivity;
 import com.mattkula.brownsnews.Prefs;
 import com.mattkula.brownsnews.R;
-import com.mattkula.brownsnews.data.Article;
+import com.mattkula.brownsnews.database.Article;
+import com.mattkula.brownsnews.database.ArticleDataSource;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -30,6 +24,8 @@ import java.util.ArrayList;
  * sends a notification to the user.
  */
 public class UpdateService extends IntentService implements NewsSourceManager.OnArticlesDownloadedListener {
+
+    ArticleDataSource dataSource;
 
     public UpdateService(){
         super("UpdateService");
@@ -43,14 +39,18 @@ public class UpdateService extends IntentService implements NewsSourceManager.On
     protected void onHandleIntent(Intent intent) {
         Log.v(Prefs.LOG_UPDATE, "UpdateService starting update.");
 
+        dataSource = new ArticleDataSource(getApplicationContext());
+        dataSource.open();
         NewsSourceManager manager = new NewsSourceManager();
         manager.getAllArticles(this, getApplicationContext());
     }
 
     @Override
-    public void onArticlesDownloaded(ArrayList<Article> articles) {
+    public void onArticlesDownloaded() {
+        ArrayList<Article> articles = dataSource.getAllArticles(1);
         if(Prefs.getValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_LAST_LINK, "none").equals(articles.get(0).link)){
             Log.v(Prefs.LOG_UPDATE, "No new articles.");
+            dataSource.close();
             return;
         } else {
             Log.v(Prefs.LOG_UPDATE, "******** Newest Title ********");
@@ -62,6 +62,7 @@ public class UpdateService extends IntentService implements NewsSourceManager.On
 
         sendNotification(getApplicationContext(), articles.get(0).title);
 
+        dataSource.close();
         Prefs.setValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_STATUS, Prefs.STATUS_NOT_UPDATING);
     }
 

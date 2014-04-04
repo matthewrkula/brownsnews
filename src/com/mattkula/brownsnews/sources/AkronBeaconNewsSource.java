@@ -1,6 +1,5 @@
 package com.mattkula.brownsnews.sources;
 
-import android.text.format.DateUtils;
 import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -8,7 +7,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mattkula.brownsnews.MyApplication;
 import com.mattkula.brownsnews.R;
-import com.mattkula.brownsnews.data.Article;
+import com.mattkula.brownsnews.database.Article;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

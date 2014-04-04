@@ -2,18 +2,11 @@ package com.mattkula.brownsnews;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -22,18 +15,15 @@ import android.widget.*;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.mattkula.brownsnews.background.UpdateManager;
-import com.mattkula.brownsnews.background.UpdateService;
-import com.mattkula.brownsnews.data.Article;
+import com.mattkula.brownsnews.database.Article;
+import com.mattkula.brownsnews.database.ArticleDataSource;
 import com.mattkula.brownsnews.fragments.ArticleViewPagerFragment;
 import com.mattkula.brownsnews.fragments.ScheduleFragment;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
-import com.mattkula.brownsnews.fragments.ArticleFragment;
 import com.mattkula.brownsnews.views.LoadingView;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.zip.Inflater;
+import java.util.Date;
 
 public class MainActivity extends FragmentActivity implements NewsSourceManager.OnArticlesDownloadedListener, SwipeRefreshLayout.OnRefreshListener{
 
@@ -51,6 +41,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     DrawerLayout drawerLayout;
 
     int currentFragmentIndex = 0;
+    ArticleDataSource dataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +52,11 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         TextView yourTextView = (TextView) findViewById(titleId);
         yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
 
-        viewPagerFragment = ArticleViewPagerFragment.newInstance(null);
+        dataSource = new ArticleDataSource(this);
+        dataSource.open();
+
+        this.articles = dataSource.getAllArticles(0);
+        viewPagerFragment = ArticleViewPagerFragment.newInstance(this.articles);
         scheduleFragment = new ScheduleFragment();
 
         getSupportFragmentManager().beginTransaction()
@@ -112,7 +107,13 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         UpdateManager.rescheduleUpdates(this);
 
-        loadArticles();
+        loadArticles(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dataSource.close();
     }
 
     private void setUpArrowAnimations(){
@@ -129,15 +130,17 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         animator.start();
     }
 
-    public void loadArticles() {
-        viewPagerFragment.fadeOut();
-        loadingView.show();
+    public void loadArticles(boolean showLoading) {
+        if(showLoading){
+            viewPagerFragment.fadeOut();
+            loadingView.show();
+        }
         new NewsSourceManager().getAllArticles(this, this);
     }
 
     @Override
-    public void onArticlesDownloaded(ArrayList<Article> articles) {
-        this.articles = articles;
+    public void onArticlesDownloaded() {
+        this.articles = dataSource.getAllArticles(0);
         loadingView.dismiss();
         viewPagerFragment.loadArticles(this.articles);
 
@@ -161,7 +164,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         Intent intent;
         switch (item.getItemId()){
             case R.id.menu_refresh:
-                loadArticles();
+                loadArticles(true);
                 return true;
             case R.id.menu_sources:
                 viewPagerFragment.fadeOut();
@@ -181,7 +184,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         if(requestCode == 1){
             if(resultCode == RESULT_OK){
                 if(viewPagerFragment.isVisible()){
-                    loadArticles();
+                    loadArticles(true);
                 }
             }
         }
@@ -190,7 +193,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     @Override
     public void onRefresh() {
-        loadArticles();
+        loadArticles(true);
     }
 
     private String[] menuItems = new String[]{
