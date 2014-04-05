@@ -6,13 +6,36 @@
               android:layout_height="match_parent"
               android:weightSum="3">
 
-    <ImageView
-            android:id="@+id/article_image"
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_weight="1"
-            android:scaleType="centerCrop"
-            />
+            android:layout_weight="1">
+
+        <ImageView
+                android:id="@+id/article_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                />
+
+        <com.mattkula.brownsnews.views.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/saved_text"
+                android:text="Saved"
+                android:textSize="55sp"
+                android:textColor="@android:color/white"
+                android:layout_centerInParent="true"
+                android:alpha="0"
+                android:scaleX="3"
+                android:scaleY="3"
+                android:shadowColor="@android:color/black"
+                android:shadowRadius="6"
+                android:shadowDx="0"
+                android:shadowDy="6"
+                />
+
+    </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"

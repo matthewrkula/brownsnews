@@ -150,7 +150,9 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         }
 
         Prefs.setValueForKey(this, Prefs.TAG_IS_FIRST_TIME, false);
-        Prefs.setValueForKey(this, Prefs.TAG_UPDATE_LAST_LINK, articles.get(0).link);
+        if(articles.size() > 0){
+            Prefs.setValueForKey(this, Prefs.TAG_UPDATE_LAST_LINK, articles.get(0).link);
+        }
     }
 
     @Override
@@ -198,6 +200,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     private String[] menuItems = new String[]{
             "News",
+            "Saved Articles",
             "Schedule"
     };
 
@@ -248,6 +251,15 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
                             .commit();
                     break;
                 case 1:
+                    ArrayList<Article> savedArticles = dataSource.getSavedArticles();
+                    viewPagerFragment = ArticleViewPagerFragment.newInstance(savedArticles);
+                    viewPagerFragment.setSwipeRefreshLayoutEnabled(false);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, viewPagerFragment)
+                            .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
+                            .commit();
+                    break;
+                case 2:
                     scheduleFragment = new ScheduleFragment();
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, scheduleFragment)

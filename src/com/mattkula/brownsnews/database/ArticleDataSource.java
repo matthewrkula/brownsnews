@@ -86,6 +86,20 @@ public class ArticleDataSource {
         database.delete(ArticleSQLiteHelper.TABLE_ARTICLES, "_id = " + article.id, null);
     }
 
+    public void saveArticle(Article article){
+        ContentValues contentValues = new ContentValues();
+        if(article.isSaved){
+            Log.v("LOGDATABASE", article.title + " is saved. Removing from saved.");
+            article.isSaved = false;
+            contentValues.put(ArticleSQLiteHelper.COLUMN_IS_SAVED, 0);
+        } else {
+            Log.v("LOGDATABASE", article.title + " is not saved. Saving.");
+            article.isSaved = true;
+            contentValues.put(ArticleSQLiteHelper.COLUMN_IS_SAVED, 1);
+        }
+        database.update(ArticleSQLiteHelper.TABLE_ARTICLES, contentValues, "_id = " + article.id, null);
+    }
+
     public ArrayList<Article> getAllArticles(int count){
         count = count == 0 ? 30 : count;
         ArrayList<Article> articles = new ArrayList<Article>();

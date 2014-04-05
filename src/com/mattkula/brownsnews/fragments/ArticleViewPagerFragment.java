@@ -22,6 +22,8 @@ public class ArticleViewPagerFragment extends Fragment {
     ViewPager viewPager;
     ArrayList<Article> articles;
 
+    private boolean isSwipeToRefreshEnabled = true;
+
     public static ArticleViewPagerFragment newInstance(ArrayList<Article> articles){
 
         ArticleViewPagerFragment fragment = new ArticleViewPagerFragment();
@@ -57,6 +59,7 @@ public class ArticleViewPagerFragment extends Fragment {
                 @Override
                 public Fragment getItem(int i) {
                     ArticleFragment articleFragment = ArticleFragment.newInstance(articles.get(i));
+                    articleFragment.setSwipeRefreshLayoutEnabled(isSwipeToRefreshEnabled);
                     return articleFragment;
                 }
 
@@ -72,6 +75,10 @@ public class ArticleViewPagerFragment extends Fragment {
         if(viewPager != null){
             viewPager.animate().alpha(1);
         }
+    }
+
+    public void setSwipeRefreshLayoutEnabled(boolean enabled){
+        this.isSwipeToRefreshEnabled = enabled;
     }
 
     public void fadeOut(){
