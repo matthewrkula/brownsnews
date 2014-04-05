@@ -146,12 +146,24 @@ public class ArticleFragment extends Fragment {
             Log.e("ASDF", "Double tapped on " + article.title);
             dataSource.saveArticle(article);
             textSaved.setText(article.isSaved ? "Saved" : "Removed");
-            textSaved.setScaleX(3);
-            textSaved.setScaleY(3);
-            textSaved.animate().alpha(1).scaleX(1).scaleY(1).setListener(savedTextListener);
+            animateStatusText();
             return super.onDoubleTap(e);
         }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            dataSource.readArticle(article);
+            textSaved.setText(article.isRead ? "Read" : "Unread");
+            animateStatusText();
+            super.onLongPress(e);
+        }
     };
+
+    private void animateStatusText(){
+        textSaved.setScaleX(3);
+        textSaved.setScaleY(3);
+        textSaved.animate().alpha(1).scaleX(1).scaleY(1).setListener(savedTextListener);
+    }
 
     Animator.AnimatorListener savedTextListener = new Animator.AnimatorListener() {
         @Override

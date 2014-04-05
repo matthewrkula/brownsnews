@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="notification_duration_names">
-        <item name="five_second">5 second</item>
+        <!--<item name="five_second">5 second</item>-->
         <item name="one_hour">1 Hour</item>>
         <item name="two_hour">2 Hour</item>>
         <item name="four_hour">4 Hour</item>>
@@ -11,7 +11,7 @@
     </string-array>
 
     <integer-array name="notification_duration_value">
-        <item name="five_second">30</item>
+        <!--<item name="five_second">30</item>-->
         <item name="one_hour">3600</item>
         <item name="two_hour">7200</item>
         <item name="four_hour">14400</item>

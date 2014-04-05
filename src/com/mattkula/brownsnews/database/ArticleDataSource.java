@@ -99,6 +99,19 @@ public class ArticleDataSource {
         }
         database.update(ArticleSQLiteHelper.TABLE_ARTICLES, contentValues, "_id = " + article.id, null);
     }
+    public void readArticle(Article article){
+        ContentValues contentValues = new ContentValues();
+        if(article.isRead){
+            Log.v("LOGDATABASE", article.title + " is saved. Marking unread.");
+            article.isRead = false;
+            contentValues.put(ArticleSQLiteHelper.COLUMN_IS_READ, 0);
+        } else {
+            Log.v("LOGDATABASE", article.title + " is not saved. Marking read.");
+            article.isRead = true;
+            contentValues.put(ArticleSQLiteHelper.COLUMN_IS_READ, 1);
+        }
+        database.update(ArticleSQLiteHelper.TABLE_ARTICLES, contentValues, "_id = " + article.id, null);
+    }
 
     public ArrayList<Article> getAllArticles(int count){
         count = count == 0 ? 30 : count;

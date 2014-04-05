@@ -64,7 +64,9 @@ public class UpdateService extends IntentService implements NewsSourceManager.On
 
         Prefs.setValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_LAST_LINK, latest.link);
 
-        sendNotification(getApplicationContext(), latest.title);
+        if(Prefs.getValueForKey(getApplicationContext(), Prefs.TAG_NOTIFICATION_ENABLED, true)){
+            sendNotification(getApplicationContext(), latest.title);
+        }
 
         dataSource.close();
         Prefs.setValueForKey(getApplicationContext(), Prefs.TAG_UPDATE_STATUS, Prefs.STATUS_NOT_UPDATING);

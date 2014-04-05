@@ -26,12 +26,7 @@ public class UpdateManager {
         AlarmManager manager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         manager.cancel(pendingIntent);
 
-        if(Prefs.getValueForKey(context, Prefs.TAG_NOTIFICATION_ENABLED, true)){
-            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + duration, duration, pendingIntent);
-            Log.v(Prefs.LOG_UPDATE, "Update in " + duration/60000 + " minutes.");
-
-//            manager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + duration, pendingIntent);
-        }
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + duration, duration, pendingIntent);
+        Log.v(Prefs.LOG_UPDATE, "Update in " + duration/60000 + " minutes.");
     }
-
 }

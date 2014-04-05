@@ -13,6 +13,8 @@ public class Prefs {
     public final static String LOG_UPDATE = "logupdate";
     public final static String TAG = "browns_news";
     public final static String TAG_IS_FIRST_TIME = "is_first_time";
+    public final static String TAG_LATEST_UPDATE = "latest_update";
+    public final static String VERSION = "1.3.1";
 
     /** Updating constants **/
     public final static String TAG_NOTIFICATION_ENABLED = "notification_enabled";

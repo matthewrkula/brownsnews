@@ -2,6 +2,7 @@ package com.mattkula.brownsnews;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -37,10 +38,12 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     ListView menu;
 
     ArticleViewPagerFragment viewPagerFragment;
+    ArticleViewPagerFragment savedArticleFragment;
     ScheduleFragment scheduleFragment;
     DrawerLayout drawerLayout;
 
     int currentFragmentIndex = 0;
+    boolean showNewArticles = true;
     ArticleDataSource dataSource;
 
     @Override
@@ -52,11 +55,16 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         TextView yourTextView = (TextView) findViewById(titleId);
         yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
 
+        if(!Prefs.getValueForKey(this, Prefs.TAG_LATEST_UPDATE, "0").equals(Prefs.VERSION)){
+            showUpdateDialog();
+            Prefs.setValueForKey(this, Prefs.TAG_LATEST_UPDATE, Prefs.VERSION);
+        }
+
         dataSource = new ArticleDataSource(this);
         dataSource.open();
 
         this.articles = dataSource.getAllArticles(0);
-        viewPagerFragment = ArticleViewPagerFragment.newInstance(this.articles);
+        viewPagerFragment = ArticleViewPagerFragment.newInstance(this.articles, true);
         scheduleFragment = new ScheduleFragment();
 
         getSupportFragmentManager().beginTransaction()
@@ -110,6 +118,16 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         loadArticles(false);
     }
 
+    private void showUpdateDialog(){
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("What's new?")
+                .setMessage("**Double tap image to save articles. \n\n**Access saved articles from the Slide Out Menu on the left.\n\n**Pinch to zoom notifications to see entire title.")
+                .setPositiveButton("Ok", null)
+                .create();
+
+        dialog.show();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -131,6 +149,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     }
 
     public void loadArticles(boolean showLoading) {
+        this.showNewArticles = showLoading;
         if(showLoading){
             viewPagerFragment.fadeOut();
             loadingView.show();
@@ -142,7 +161,9 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     public void onArticlesDownloaded() {
         this.articles = dataSource.getAllArticles(0);
         loadingView.dismiss();
-        viewPagerFragment.loadArticles(this.articles);
+        if(this.currentFragmentIndex == 0){// && this.showNewArticles){
+            viewPagerFragment.loadArticles(this.articles);
+        }
 
         if(Prefs.isFirstTime(this)){
             tutorialView.setVisibility(View.VISIBLE);
@@ -153,12 +174,6 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         if(articles.size() > 0){
             Prefs.setValueForKey(this, Prefs.TAG_UPDATE_LAST_LINK, articles.get(0).link);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
     @Override
@@ -244,7 +259,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
             switch (i){
                 case 0:
-                    viewPagerFragment = ArticleViewPagerFragment.newInstance(MainActivity.this.articles);
+                    viewPagerFragment = ArticleViewPagerFragment.newInstance(MainActivity.this.articles, true);
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, viewPagerFragment)
                             .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
@@ -252,10 +267,10 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
                     break;
                 case 1:
                     ArrayList<Article> savedArticles = dataSource.getSavedArticles();
-                    viewPagerFragment = ArticleViewPagerFragment.newInstance(savedArticles);
-                    viewPagerFragment.setSwipeRefreshLayoutEnabled(false);
+                    savedArticleFragment = ArticleViewPagerFragment.newInstance(savedArticles, false);
+                    savedArticleFragment.setSwipeRefreshLayoutEnabled(false);
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, viewPagerFragment)
+                            .replace(R.id.fragment_container, savedArticleFragment)
                             .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
                             .commit();
                     break;
