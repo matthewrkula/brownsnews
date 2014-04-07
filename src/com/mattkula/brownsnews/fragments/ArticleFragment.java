@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.*;
+import android.view.animation.AccelerateInterpolator;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -156,22 +157,26 @@ public class ArticleFragment extends Fragment {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             Log.e("ASDF", "Swiped up on " + article.title);
-            if(velocityY < 0 && Math.abs(velocityX) < Math.abs(velocityY)){
+            if(velocityY > 0 && Math.abs(velocityX) < Math.abs(velocityY)){
                 dataSource.readArticle(article);
-                animateFlyUp();
+                if(article.isRead){
+                    animateFlyDown();
+                } else {
+                    textSaved.setText("Unread");
+                    animateStatusText();
+                }
                 return true;
             }
             return super.onFling(e1, e2, velocityX, velocityY);
         }
     };
 
-    private void animateFlyUp(){
-
+    private void animateFlyDown(){
         WindowManager manager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
         Point p = new Point();
         manager.getDefaultDisplay().getSize(p);
 
-        getView().animate().translationY(-p.y).scaleY(.5f).scaleX(.5f).setListener(new SimpleAnimatorListener() {
+        getView().animate().translationY(p.y).scaleY(.5f).scaleX(.5f).alpha(0).setInterpolator(new AccelerateInterpolator()).setListener(new SimpleAnimatorListener() {
             @Override
             public void onAnimationEnd(Animator animator) {
                 if (delegate != null) {

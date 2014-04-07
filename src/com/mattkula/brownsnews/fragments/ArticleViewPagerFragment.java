@@ -55,6 +55,8 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
 
         if(bundleArticles != null){
             loadArticles(bundleArticles);
+        } else {
+            loadArticles(new ArrayList<Article>());
         }
 
         boolean hasOptionsMenu = getArguments().getBoolean("hasOptions");
@@ -101,6 +103,7 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
     Animator.AnimatorListener animationListener = new SimpleAnimatorListener(){
         @Override
         public void onAnimationEnd(Animator animator) {
+            showTextIfNeccessary();
             textEmpty.setAlpha(1);
         }
     };
