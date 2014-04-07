@@ -1,5 +1,6 @@
 package com.mattkula.brownsnews.fragments;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -81,14 +82,32 @@ public class ArticleViewPagerFragment extends Fragment {
                     return articles.size();
                 }
             });
-//            viewPager.setCurrentItem(currentIndex);
         } else {
             Log.e("ASDF", "NULLLL");
         }
 
         if(viewPager != null){
-            viewPager.animate().alpha(1);
-            textEmpty.setText(myText);
+            viewPager.animate().alpha(1).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    textEmpty.setAlpha(1);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            }).start();
         }
     }
 
@@ -116,8 +135,8 @@ public class ArticleViewPagerFragment extends Fragment {
 
     public void fadeOut(){
         if(viewPager != null){
-            viewPager.animate().alpha(0);
-            textEmpty.setText("");
+            textEmpty.setAlpha(0);
+            viewPager.animate().alpha(0).setListener(null);
         }
     }
 

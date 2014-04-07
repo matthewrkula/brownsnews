@@ -51,6 +51,7 @@ public class WaitingForNextYearNewsSource implements NewsSource{
                         Article article = Article.createFromJsonObject(entry);
                         article.newsSource = getName();
                         article.content = article.content.replaceAll("___________________________________________", "");
+                        article.content = article.content.replaceFirst("<a(|\\s+[^>]+)>", "");
 
                         for(int j=0; j < allowedCategories.length; j++){
                             if(article.categories.contains(allowedCategories[j])){

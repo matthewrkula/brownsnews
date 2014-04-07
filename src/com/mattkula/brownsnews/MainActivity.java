@@ -115,13 +115,16 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         UpdateManager.rescheduleUpdates(this);
 
-        loadArticles(false);
+        loadArticles(true);
     }
 
     private void showUpdateDialog(){
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("What's new?")
-                .setMessage("**Double tap image to save articles. \n\n**Access saved articles from the Slide Out Menu on the left.\n\n**Pinch to zoom notifications to see entire title.")
+                .setMessage("**Double tap image to save articles.\n\n"+
+                        "**Access saved articles from the Slide Out Menu on the left.\n\n"+
+                        "**Pinch to zoom notifications to see entire title.\n\n"+
+                        "Remember you can press the title of the article to go to the website")
                 .setPositiveButton("Ok", null)
                 .create();
 

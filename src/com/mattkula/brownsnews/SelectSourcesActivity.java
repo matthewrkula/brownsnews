@@ -58,7 +58,8 @@ public class SelectSourcesActivity extends FragmentActivity {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             NewsSource source = sources[i];
             boolean isSelected = Prefs.isNewsSourceSelected(SelectSourcesActivity.this, source);
-            view.animate().alpha(isSelected ? .3f : 1f);
+//            view.animate().alpha(isSelected ? .3f : 1f);
+            view.setAlpha(isSelected ? .3f : 1f);
             Prefs.setValueForKey(SelectSourcesActivity.this, source.getName(), !isSelected);
         }
     };
