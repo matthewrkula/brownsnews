@@ -15,10 +15,9 @@ import android.widget.TextView;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.database.ArticleDataSource;
+import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 import com.mattkula.brownsnews.views.NotifyingScrollView;
 import com.squareup.picasso.Picasso;
-
-import javax.sql.DataSource;
 
 
 /**
@@ -38,6 +37,8 @@ public class ArticleFragment extends Fragment {
     boolean isSwipeToRefreshEnabled = true;
 
     ArticleDataSource dataSource;
+
+    ArticleViewPagerDelegate delegate;
 
     public static ArticleFragment newInstance(Article article) {
         ArticleFragment myFragment = new ArticleFragment();
@@ -151,11 +152,16 @@ public class ArticleFragment extends Fragment {
         }
 
         @Override
-        public void onLongPress(MotionEvent e) {
-            dataSource.readArticle(article);
-            textSaved.setText(article.isRead ? "Read" : "Unread");
-            animateStatusText();
-            super.onLongPress(e);
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if(velocityY < 0 && Math.abs(velocityX) < Math.abs(velocityY)){
+                dataSource.readArticle(article);
+                textSaved.setText(article.isRead ? "Read" : "Unread");
+                animateStatusText();
+                if(delegate != null){
+                    delegate.removeArticleAtPosition(ArticleFragment.this.article);
+                }
+            }
+            return true;
         }
     };
 
@@ -165,25 +171,18 @@ public class ArticleFragment extends Fragment {
         textSaved.animate().alpha(1).scaleX(1).scaleY(1).setListener(savedTextListener);
     }
 
-    Animator.AnimatorListener savedTextListener = new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
-        }
-
+    Animator.AnimatorListener savedTextListener = new SimpleAnimatorListener(){
         @Override
         public void onAnimationEnd(Animator animator) {
             textSaved.animate().alpha(0).setDuration(200).setStartDelay(200);
         }
-
-        @Override
-        public void onAnimationCancel(Animator animator) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animator) {
-
-        }
     };
 
+    public void setDelegate(ArticleViewPagerDelegate delegate){
+        this.delegate = delegate;
+    }
+
+    public interface ArticleViewPagerDelegate {
+        public void removeArticleAtPosition(Article article);
+    }
 }

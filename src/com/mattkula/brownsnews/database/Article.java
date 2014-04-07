@@ -95,6 +95,11 @@ public class Article implements Serializable, Comparable<Article>{
     }
 
     @Override
+    public boolean equals(Object o) {
+        return this.title.equals(((Article)o).title);
+    }
+
+    @Override
     public String toString() {
         return title + " " + author;
     }

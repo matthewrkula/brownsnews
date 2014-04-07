@@ -11,13 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
+import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 
 import java.util.ArrayList;
 
 /**
  * Created by matt on 3/30/14.
  */
-public class ArticleViewPagerFragment extends Fragment {
+public class ArticleViewPagerFragment extends Fragment implements ArticleFragment.ArticleViewPagerDelegate {
 
     public ViewPager viewPager;
     TextView textEmpty;
@@ -74,6 +75,7 @@ public class ArticleViewPagerFragment extends Fragment {
                 public Fragment getItem(int i) {
                     ArticleFragment articleFragment = ArticleFragment.newInstance(articles.get(i));
                     articleFragment.setSwipeRefreshLayoutEnabled(isSwipeToRefreshEnabled);
+                    articleFragment.setDelegate(ArticleViewPagerFragment.this);
                     return articleFragment;
                 }
 
@@ -81,34 +83,32 @@ public class ArticleViewPagerFragment extends Fragment {
                 public int getCount() {
                     return articles.size();
                 }
+
+                @Override
+                public int getItemPosition(Object object) {
+                    return POSITION_NONE;
+                }
             });
         } else {
             Log.e("ASDF", "NULLLL");
         }
 
         if(viewPager != null){
-            viewPager.animate().alpha(1).setListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animator) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animator) {
-                    textEmpty.setAlpha(1);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animator) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animator) {
-
-                }
-            }).start();
+            viewPager.animate().alpha(1).setListener(animationListener).start();
         }
+    }
+
+    Animator.AnimatorListener animationListener = new SimpleAnimatorListener(){
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            textEmpty.setAlpha(1);
+        }
+    };
+
+    public void removeArticleAtPosition(Article article){
+        int index = this.articles.indexOf(article);
+        this.articles.remove(index);
+        this.viewPager.getAdapter().notifyDataSetChanged();
     }
 
     @Override
