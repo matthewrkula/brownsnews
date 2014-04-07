@@ -1,8 +1,10 @@
 package com.mattkula.brownsnews.fragments;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -153,17 +155,31 @@ public class ArticleFragment extends Fragment {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.e("ASDF", "Swiped up on " + article.title);
             if(velocityY < 0 && Math.abs(velocityX) < Math.abs(velocityY)){
                 dataSource.readArticle(article);
-                textSaved.setText(article.isRead ? "Read" : "Unread");
-                animateStatusText();
-                if(delegate != null){
+                animateFlyUp();
+                return true;
+            }
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+    };
+
+    private void animateFlyUp(){
+
+        WindowManager manager = (WindowManager)getActivity().getSystemService(Context.WINDOW_SERVICE);
+        Point p = new Point();
+        manager.getDefaultDisplay().getSize(p);
+
+        getView().animate().translationY(-p.y).scaleY(.5f).scaleX(.5f).setListener(new SimpleAnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                if (delegate != null) {
                     delegate.removeArticleAtPosition(ArticleFragment.this.article);
                 }
             }
-            return true;
-        }
-    };
+        });
+    }
 
     private void animateStatusText(){
         textSaved.setScaleX(3);

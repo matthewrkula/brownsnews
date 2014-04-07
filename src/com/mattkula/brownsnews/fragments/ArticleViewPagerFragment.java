@@ -61,7 +61,7 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         setHasOptionsMenu(hasOptionsMenu);
 
         myText = hasOptionsMenu ? mainText : savedText;
-        textEmpty.setText(myText);
+        showTextIfNeccessary();
 
         return v;
     }
@@ -106,9 +106,11 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
     };
 
     public void removeArticleAtPosition(Article article){
+        showTextIfNeccessary();
         int index = this.articles.indexOf(article);
         this.articles.remove(index);
         this.viewPager.getAdapter().notifyDataSetChanged();
+        showTextIfNeccessary();
     }
 
     @Override
@@ -137,6 +139,14 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         if(viewPager != null){
             textEmpty.setAlpha(0);
             viewPager.animate().alpha(0).setListener(null);
+        }
+    }
+
+    private void showTextIfNeccessary(){
+        if(this.articles.size() == 0){
+            textEmpty.setText(myText);
+        } else {
+            textEmpty.setText("");
         }
     }
 

@@ -27,6 +27,7 @@ import java.util.List;
  */
 public class SettingsActivity extends Activity {
 
+    CheckBox readShown;
     CheckBox notificationsEnabled;
     Spinner notificationDuration;
 
@@ -61,6 +62,8 @@ public class SettingsActivity extends Activity {
                 return;
             }
         });
+        readShown = (CheckBox)findViewById(R.id.checkbox_read_shown);
+        readShown.setChecked(Prefs.getValueForKey(this, Prefs.TAG_READ_SHOWN, false));
     }
 
     public int getSelectedIndex(){
@@ -75,6 +78,8 @@ public class SettingsActivity extends Activity {
     }
 
     private void save(){
+        setResult(RESULT_OK);
+        Prefs.setValueForKey(this, Prefs.TAG_READ_SHOWN, readShown.isChecked());
         Prefs.setValueForKey(this, Prefs.TAG_NOTIFICATION_ENABLED, notificationsEnabled.isChecked());
         Prefs.setValueForKey(this, Prefs.TAG_NOTIFICATION_INTERVAL, integers[selectedIndex]);
         UpdateManager.rescheduleUpdates(this);

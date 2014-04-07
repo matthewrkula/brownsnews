@@ -60,6 +60,26 @@
                     />
 
         </RelativeLayout>
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+            <com.mattkula.brownsnews.views.CustomTextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                          android:text="Show Read Articles"
+                                                          android:textSize="17sp"
+                                                          android:textColor="@android:color/white"
+                                                          android:layout_alignParentLeft="true"
+                                                          android:layout_centerVertical="true"/>
+
+            <CheckBox
+                    android:id="@+id/checkbox_read_shown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>

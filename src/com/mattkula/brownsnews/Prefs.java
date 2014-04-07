@@ -17,6 +17,7 @@ public class Prefs {
     public final static String VERSION = "1.3.1";
 
     /** Updating constants **/
+    public final static String TAG_READ_SHOWN = "read_shown";
     public final static String TAG_NOTIFICATION_ENABLED = "notification_enabled";
     public final static String TAG_NOTIFICATION_INTERVAL = "notification_interval";
     public final static String TAG_UPDATE_STATUS = "update_status";

@@ -47,7 +47,7 @@ public class UpdateService extends IntentService implements NewsSourceManager.On
 
     @Override
     public void onArticlesDownloaded() {
-        ArrayList<Article> articles = dataSource.getAllArticles(1);
+        ArrayList<Article> articles = dataSource.getAllArticles(1, false);
         if(articles.size() == 0){
             return;
         }

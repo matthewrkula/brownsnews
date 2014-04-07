@@ -113,11 +113,18 @@ public class ArticleDataSource {
         database.update(ArticleSQLiteHelper.TABLE_ARTICLES, contentValues, "_id = " + article.id, null);
     }
 
-    public ArrayList<Article> getAllArticles(int count){
+    public void markAllUnread(){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ArticleSQLiteHelper.COLUMN_IS_READ, 0);
+        database.update(ArticleSQLiteHelper.TABLE_ARTICLES, contentValues, null, null);
+    }
+
+    public ArrayList<Article> getAllArticles(int count, boolean viewRead){
         count = count == 0 ? 30 : count;
         ArrayList<Article> articles = new ArrayList<Article>();
         Cursor cursor = database.rawQuery("SELECT * FROM " + ArticleSQLiteHelper.TABLE_ARTICLES
                 + " WHERE " + ArticleSQLiteHelper.COLUMN_SOURCE + " IN " + getAllowedSourcesString()
+                + (viewRead ? "" : " AND " + ArticleSQLiteHelper.COLUMN_IS_READ + " = " + 0)
                 + " ORDER BY " + ArticleSQLiteHelper.COLUMN_PUBLISHED_DATE + " DESC "
                 + " LIMIT " + count, null);
         cursor.moveToFirst();

@@ -21,6 +21,7 @@ import com.mattkula.brownsnews.database.ArticleDataSource;
 import com.mattkula.brownsnews.fragments.ArticleViewPagerFragment;
 import com.mattkula.brownsnews.fragments.ScheduleFragment;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
+import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 import com.mattkula.brownsnews.views.LoadingView;
 
 import java.util.ArrayList;
@@ -63,8 +64,11 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         dataSource = new ArticleDataSource(this);
         dataSource.open();
 
-        this.articles = dataSource.getAllArticles(0);
-        viewPagerFragment = ArticleViewPagerFragment.newInstance(this.articles, true);
+        // FOR TESTING
+        dataSource.markAllUnread();
+        //
+
+        viewPagerFragment = ArticleViewPagerFragment.newInstance(new ArrayList<Article>(), true);
         scheduleFragment = new ScheduleFragment();
 
         getSupportFragmentManager().beginTransaction()
@@ -77,25 +81,10 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         tutorialView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                view.animate().alpha(0).setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-
-                    }
-
+                view.animate().alpha(0).setListener(new SimpleAnimatorListener() {
                     @Override
                     public void onAnimationEnd(Animator animator) {
                         view.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
                     }
                 });
             }
@@ -162,7 +151,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     @Override
     public void onArticlesDownloaded() {
-        this.articles = dataSource.getAllArticles(0);
+        this.articles = dataSource.getAllArticles(0, Prefs.getValueForKey(this, Prefs.TAG_READ_SHOWN, false));
         loadingView.dismiss();
         if(this.currentFragmentIndex == 0){// && this.showNewArticles){
             viewPagerFragment.loadArticles(this.articles);
@@ -193,7 +182,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
                 return true;
             case R.id.menu_settings:
                 intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 2);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -201,10 +190,10 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1){
+        if(requestCode == 1 || requestCode == 2){
             if(resultCode == RESULT_OK){
                 if(viewPagerFragment.isVisible()){
-                    loadArticles(true);
+                    loadArticles(requestCode == 1);
                 }
             }
         }
