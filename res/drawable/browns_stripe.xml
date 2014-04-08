@@ -4,12 +4,12 @@
 
     <item>
         <shape>
-            <solid android:color="@color/browns_orange"/>
+            <solid android:color="@color/primary_light"/>
         </shape>
     </item>
     <item android:left="140dp" android:right="140dp">
         <shape>
-            <solid android:color="@color/browns_brown"/>
+            <solid android:color="@color/primary_dark"/>
         </shape>
     </item>
     <item android:left="160dp" android:right="160dp">

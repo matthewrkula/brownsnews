@@ -3,13 +3,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/browns_brown">
+                android:background="@color/primary_dark">
 
     <com.mattkula.brownsnews.views.CustomTextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Coming soon!"
             android:layout_margin="30dp"
             android:layout_centerInParent="true"
-            android:textColor="@color/browns_orange"
+            android:textColor="@color/primary_light"
             android:textSize="26sp"/>
 
 </RelativeLayout>

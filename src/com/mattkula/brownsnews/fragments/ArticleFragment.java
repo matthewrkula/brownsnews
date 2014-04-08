@@ -15,6 +15,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.mattkula.brownsnews.Prefs;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.database.ArticleDataSource;
@@ -35,6 +36,7 @@ public class ArticleFragment extends Fragment {
     TextView textSource;
     TextView textSaved;
     WebView textContent;
+    ImageView imageRead;
     NotifyingScrollView scrollView;
     SwipeRefreshLayout swipeRefreshLayout;
     boolean isSwipeToRefreshEnabled = true;
@@ -70,12 +72,12 @@ public class ArticleFragment extends Fragment {
         textSource = (TextView)v.findViewById(R.id.article_source);
         textContent = (WebView)v.findViewById(R.id.article_content);
         textSaved = (TextView)v.findViewById(R.id.saved_text);
+        imageRead = (ImageView)v.findViewById(R.id.image_read);
         swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe_container);
 
         swipeRefreshLayout.setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener)getActivity());
-        swipeRefreshLayout.setColorScheme(R.color.browns_orange, R.color.browns_orange, R.color.browns_brown, R.color.browns_orange);
+        swipeRefreshLayout.setColorScheme(R.color.primary_light, R.color.primary_light, R.color.primary_dark, R.color.primary_light);
         swipeRefreshLayout.setEnabled(isSwipeToRefreshEnabled);
-
 
         textTitle.setText(article.title);
         textTitle.setOnClickListener(new View.OnClickListener() {
@@ -96,12 +98,14 @@ public class ArticleFragment extends Fragment {
             }
         });
 
+        imageRead.setAlpha(article.isRead ? 1f : 0f);
+
         textAuthor.setText("By: " + article.author + " on " + article.publishedDate.toLocaleString());
         textSource.setText("Via: " + article.newsSource);
 
         textContent.getSettings().setUseWideViewPort(false);
         textContent.setBackgroundColor(Color.argb(1, 0, 0, 0));
-        textContent.setBackgroundResource(R.color.browns_brown);
+        textContent.setBackgroundResource(R.color.primary_dark);
         textContent.loadData(getStyle(article.content), "text/html; charset=UTF-8", null);
         textContent.animate().alpha(1).setDuration(300);
 
@@ -156,14 +160,21 @@ public class ArticleFragment extends Fragment {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.e("ASDF", "Swiped up on " + article.title);
+            Log.e("ASDF", "Swiped down on " + article.title);
             if(velocityY > 0 && Math.abs(velocityX) < Math.abs(velocityY)){
                 dataSource.readArticle(article);
                 if(article.isRead){
-                    animateFlyDown();
+                    if(Prefs.getValueForKey(getActivity(), Prefs.TAG_READ_SHOWN, false)){
+                        textSaved.setText("Read");
+                        animateStatusText();
+                        imageRead.setAlpha(1f);
+                    } else {
+                        animateFlyDown();
+                    }
                 } else {
                     textSaved.setText("Unread");
                     animateStatusText();
+                    imageRead.setAlpha(0f);
                 }
                 return true;
             }
@@ -176,7 +187,7 @@ public class ArticleFragment extends Fragment {
         Point p = new Point();
         manager.getDefaultDisplay().getSize(p);
 
-        getView().animate().translationY(p.y).scaleY(.5f).scaleX(.5f).alpha(0).setInterpolator(new AccelerateInterpolator()).setListener(new SimpleAnimatorListener() {
+        getView().animate().translationY(p.y).rotationX(-35).scaleY(.5f).scaleX(.5f).alpha(0).setInterpolator(new AccelerateInterpolator()).setListener(new SimpleAnimatorListener() {
             @Override
             public void onAnimationEnd(Animator animator) {
                 if (delegate != null) {

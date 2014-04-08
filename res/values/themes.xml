@@ -11,7 +11,7 @@
            parent="android:Widget.Holo.Light.ActionBar">
         <item name="android:background">@drawable/orange_gradient</item>
         <item name="android:titleTextStyle">@style/CustomActionBarTheme.ActionBar.Text</item>
-        <item name="android:solidColor">@color/browns_orange</item>
+        <item name="android:solidColor">@color/primary_light</item>
         <item name="android:icon">@drawable/logo</item>
     </style>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="browns_orange">#FFE34912</color>
-    <color name="browns_brown">#FF26201E</color>
+    <color name="primary_light">#FFE34912</color>
+    <color name="primary_dark">#FF26201E</color>
 </resources>

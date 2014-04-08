@@ -85,7 +85,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:paddingTop="?android:attr/actionBarSize"
-            android:background="@color/browns_brown"
+            android:background="@color/primary_dark"
             />
 
 </android.support.v4.widget.DrawerLayout>

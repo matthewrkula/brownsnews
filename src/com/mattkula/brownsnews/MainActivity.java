@@ -187,10 +187,16 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1 || requestCode == 2){
+        if(requestCode == 1) {
             if(resultCode == RESULT_OK){
                 if(viewPagerFragment.isVisible()){
                     loadArticles(requestCode == 1);
+                }
+            }
+        } else if(requestCode == 2){
+            if(resultCode == RESULT_OK){
+                if(viewPagerFragment.isVisible()){
+                    onArticlesDownloaded();
                 }
             }
         }

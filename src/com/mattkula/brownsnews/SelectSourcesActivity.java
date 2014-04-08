@@ -20,8 +20,7 @@ public class SelectSourcesActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int titleId = getResources().getIdentifier("action_bar_title", "id",
-                "android");
+        int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
         TextView yourTextView = (TextView) findViewById(titleId);
         yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
         getActionBar().setTitle("Sources");
@@ -58,7 +57,6 @@ public class SelectSourcesActivity extends FragmentActivity {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             NewsSource source = sources[i];
             boolean isSelected = Prefs.isNewsSourceSelected(SelectSourcesActivity.this, source);
-//            view.animate().alpha(isSelected ? .3f : 1f);
             view.setAlpha(isSelected ? .3f : 1f);
             Prefs.setValueForKey(SelectSourcesActivity.this, source.getName(), !isSelected);
         }
@@ -93,11 +91,7 @@ public class SelectSourcesActivity extends FragmentActivity {
             ImageView bg = (ImageView)v.findViewById(R.id.grid_image);
             bg.setImageDrawable(getResources().getDrawable(s.getImageId()));
 
-            if(!Prefs.isNewsSourceSelected(getApplicationContext(), s)){
-                v.setAlpha(0.3f);
-            } else {
-                v.setAlpha(1f);
-            }
+            v.setAlpha(Prefs.isNewsSourceSelected(getApplicationContext(), s) ? 1f : .3f);
 
             return v;
         }
