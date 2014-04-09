@@ -53,15 +53,22 @@ public class NewsSourceManager {
         }
         counter++;
         if(counter == numOfSources){
-            Collections.sort(this.articles);
-            listener.onArticlesDownloaded();
-            dataSource.close();
+            completeDownloadOperation();
         }
     }
 
     public void onError(NewsSource source){
         Log.e("BROWNSERROR", source.getName() + " could not be downloaded.");
         counter++;
+        if(counter == numOfSources){
+            completeDownloadOperation();
+        }
+    }
+
+    private void completeDownloadOperation(){
+        Collections.sort(this.articles);
+        listener.onArticlesDownloaded();
+        dataSource.close();
     }
 
     public static ArrayList<NewsSource> getAllowedSources(Context context){
