@@ -56,6 +56,7 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         if(bundleArticles != null){
             loadArticles(bundleArticles);
         } else {
+            showTextIfNeccessary();
             loadArticles(new ArrayList<Article>());
         }
 
@@ -63,7 +64,6 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         setHasOptionsMenu(hasOptionsMenu);
 
         myText = hasOptionsMenu ? mainText : savedText;
-        showTextIfNeccessary();
 
         return v;
     }
@@ -146,7 +146,7 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
     }
 
     private void showTextIfNeccessary(){
-        if(this.articles.size() == 0){
+        if(this.articles != null && this.articles.size() == 0){
             textEmpty.setText(myText);
         } else {
             textEmpty.setText("");
