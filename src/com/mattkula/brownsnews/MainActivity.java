@@ -111,7 +111,8 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("What's new?")
                 .setMessage("**Mark articles as 'read' by swiping down on the image (Go to settings to display 'read' articles)\n\n" +
-                "**If you start your phone and have notifications enabled, you no longer need to open the app first to start getting notifications")
+                        "**Articles now readable offline\n\n" +
+                        "**If you start your phone and have notifications enabled, you no longer need to open the app first to start getting notifications")
                 .setPositiveButton("OK", null)
                 .create();
 
