@@ -14,7 +14,7 @@ public class Prefs {
     public final static String TAG = "browns_news";
     public final static String TAG_IS_FIRST_TIME = "is_first_time";
     public final static String TAG_LATEST_UPDATE = "latest_update";
-    public final static String VERSION = "1.4";
+    public final static String VERSION = "1.4.1";
 
     /** Updating constants **/
     public final static String TAG_READ_SHOWN = "read_shown";

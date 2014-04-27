@@ -116,9 +116,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     private void showUpdateDialog(){
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("What's new?")
-                .setMessage("**Mark articles as 'read' by swiping down on the image (Go to settings to display 'read' articles)\n\n" +
-                        "**Articles now readable offline\n\n" +
-                        "**If you start your phone and have notifications enabled, you no longer need to open the app first to start getting notifications")
+                .setMessage("You can not view the team schedule from the sliding menu!")
                 .setPositiveButton("OK", null)
                 .create();
 
