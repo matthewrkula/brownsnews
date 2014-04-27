@@ -1,6 +1,7 @@
 package com.mattkula.brownsnews.fragments;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -11,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
+import com.mattkula.brownsnews.database.ArticleDataSource;
+import com.mattkula.brownsnews.sources.NewsSource;
 import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 
 import java.util.ArrayList;

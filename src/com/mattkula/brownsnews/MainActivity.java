@@ -104,7 +104,13 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         UpdateManager.rescheduleUpdates(this);
 
-        loadArticles(true);
+        loadArticles(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadArticlesIntoFragment();
     }
 
     private void showUpdateDialog(){
@@ -150,11 +156,8 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     @Override
     public void onArticlesDownloaded() {
-        this.articles = dataSource.getAllArticles(0, Prefs.getValueForKey(this, Prefs.TAG_READ_SHOWN, false));
+        loadArticlesIntoFragment();
         loadingView.dismiss();
-        if(this.currentFragmentIndex == 0){// && this.showNewArticles){
-            viewPagerFragment.loadArticles(this.articles);
-        }
 
         if(Prefs.isFirstTime(this)){
             tutorialView.setVisibility(View.VISIBLE);
@@ -167,6 +170,13 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         }
     }
 
+    private void loadArticlesIntoFragment(){
+        this.articles = dataSource.getAllArticles(0, Prefs.getValueForKey(this, Prefs.TAG_READ_SHOWN, false));
+        if(this.currentFragmentIndex == 0){// && this.showNewArticles){
+            viewPagerFragment.loadArticles(this.articles);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
@@ -175,7 +185,6 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
                 loadArticles(true);
                 return true;
             case R.id.menu_sources:
-                viewPagerFragment.fadeOut();
                 intent = new Intent(this, SelectSourcesActivity.class);
                 startActivityForResult(intent, 1);
                 return true;
@@ -192,7 +201,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         if(requestCode == 1) {
             if(resultCode == RESULT_OK){
                 if(viewPagerFragment.isVisible()){
-                    loadArticles(requestCode == 1);
+                    loadArticlesIntoFragment();
                 }
             }
         } else if(requestCode == 2){

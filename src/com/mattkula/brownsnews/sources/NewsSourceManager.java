@@ -51,6 +51,7 @@ public class NewsSourceManager {
         for(Article article : newArticles){
             this.articles.add(dataSource.createOrGetArticle(article));
         }
+
         counter++;
         if(counter == numOfSources){
             completeDownloadOperation();

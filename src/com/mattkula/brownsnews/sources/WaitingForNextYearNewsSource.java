@@ -52,7 +52,6 @@ public class WaitingForNextYearNewsSource implements NewsSource{
                         article.newsSource = getName();
                         article.content = article.content.replaceAll("___________________________________________", "");
                         article.content = article.content.replaceFirst("<a(|\\s+[^>]+)>", "");
-                        Log.e("ASDF", article.imageUrl);
 
                         for(int j=0; j < allowedCategories.length; j++){
                             if(article.categories.contains(allowedCategories[j])){
