@@ -116,7 +116,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     private void showUpdateDialog(){
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("What's new?")
-                .setMessage("You can not view the team schedule from the sliding menu!")
+                .setMessage("You can now view the team schedule from the sliding menu!")
                 .setPositiveButton("OK", null)
                 .create();
 
