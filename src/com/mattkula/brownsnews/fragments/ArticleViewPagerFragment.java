@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.*;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.mattkula.brownsnews.R;
@@ -160,7 +161,9 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         @Override
         public void transformPage(View view, float v) {
             LinearLayout layout = (LinearLayout)view.findViewById(R.id.content);
+            ImageView image = (ImageView)view.findViewById(R.id.article_image);
             layout.setTranslationX(600*v);
+            image.setTranslationX(-300*v);
         }
     };
 }
