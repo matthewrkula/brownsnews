@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -42,6 +44,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     ArticleViewPagerFragment savedArticleFragment;
     ScheduleFragment scheduleFragment;
     DrawerLayout drawerLayout;
+    ActionBarDrawerToggle drawerToggle;
 
     int currentFragmentIndex = 0;
     boolean showNewArticles = true;
@@ -51,8 +54,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        int titleId = getResources().getIdentifier("action_bar_title", "id",
-                "android");
+        int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
         TextView yourTextView = (TextView) findViewById(titleId);
         yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
 
@@ -99,12 +101,39 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         menu.setOnItemClickListener(menuItemClickListener);
 
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.app_name, R.string.app_name) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
         requestQueue = Volley.newRequestQueue(this);
-
         UpdateManager.rescheduleUpdates(this);
 
         loadArticles(false);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -177,6 +206,10 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(drawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+
         Intent intent;
         switch (item.getItemId()){
             case R.id.menu_refresh:
@@ -217,10 +250,11 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         loadArticles(true);
     }
 
-    private String[] menuItems = new String[]{
+    private String[] menuItems = {
             "News",
             "Saved Articles",
-            "Schedule"
+            "Schedule",
+            "Article Sources",
     };
 
     private BaseAdapter menuAdapter = new BaseAdapter() {
@@ -287,6 +321,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
                     getSupportFragmentManager().executePendingTransactions();
                     break;
             }
+
         }
     };
 }
