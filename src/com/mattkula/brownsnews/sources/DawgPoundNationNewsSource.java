@@ -44,7 +44,6 @@ public class DawgPoundNationNewsSource implements NewsSource {
 
                     for(int i =0; i < entries.length(); i++){
                         JSONObject entry = entries.getJSONObject(i);
-                        Log.e("MATTKULA", entry.getString("content"));
                         Article article = Article.createFromJsonObject(entry);
                         article.newsSource = getName();
                         article.imageUrl = "none";
