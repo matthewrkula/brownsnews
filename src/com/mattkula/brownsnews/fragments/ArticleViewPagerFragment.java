@@ -72,6 +72,22 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(viewPager != null) {
+            viewPager.setCurrentItem(currentIndex);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (viewPager != null) {
+            currentIndex = viewPager.getCurrentItem();
+        }
+    }
+
     public void loadArticles(final ArrayList<Article> articles){
         this.articles = articles;
 
@@ -95,6 +111,7 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
                     return POSITION_NONE;
                 }
             });
+            viewPager.setCurrentItem(currentIndex);
         } else {
             Log.e("ASDF", "NULLLL");
         }
