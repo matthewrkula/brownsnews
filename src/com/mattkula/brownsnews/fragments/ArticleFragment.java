@@ -14,6 +14,7 @@ import android.view.*;
 import android.view.animation.AccelerateInterpolator;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.mattkula.brownsnews.Prefs;
 import com.mattkula.brownsnews.R;
@@ -75,7 +76,13 @@ public class ArticleFragment extends Fragment {
         imageRead = (ImageView)v.findViewById(R.id.image_read);
         swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe_container);
 
-        swipeRefreshLayout.setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener)getActivity());
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ((SwipeRefreshLayout.OnRefreshListener)getActivity()).onRefresh();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         swipeRefreshLayout.setColorScheme(R.color.primary_light, R.color.primary_light, R.color.primary_dark, R.color.primary_light);
         swipeRefreshLayout.setEnabled(isSwipeToRefreshEnabled);
 
@@ -122,6 +129,12 @@ public class ArticleFragment extends Fragment {
         }
 
         scrollView = (NotifyingScrollView)v.findViewById(R.id.scrollview);
+        scrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
+
+            }
+        });
 
         return v;
     }

@@ -116,9 +116,7 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
             Log.e("ASDF", "NULLLL");
         }
 
-        if(viewPager != null){
-            viewPager.animate().alpha(1).setListener(animationListener).start();
-        }
+        fadeIn();
     }
 
     Animator.AnimatorListener animationListener = new SimpleAnimatorListener(){
@@ -163,6 +161,12 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         if(viewPager != null){
             textEmpty.setAlpha(0);
             viewPager.animate().alpha(0).setListener(null);
+        }
+    }
+
+    public void fadeIn() {
+        if(viewPager != null){
+            viewPager.animate().alpha(1).setListener(animationListener).start();
         }
     }
 

@@ -32,7 +32,7 @@ import java.util.Date;
 public class MainActivity extends FragmentActivity implements NewsSourceManager.OnArticlesDownloadedListener, SwipeRefreshLayout.OnRefreshListener{
 
     RequestQueue requestQueue;
-    ArrayList<Article> articles;
+    ArrayList<Article> articles = new ArrayList<Article>();
 
     LoadingView loadingView;
     ImageView tutorialArrow;
@@ -198,9 +198,15 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     }
 
     private void loadArticlesIntoFragment(){
-        this.articles = dataSource.getAllArticles(0, Prefs.getValueForKey(this, Prefs.TAG_READ_SHOWN, false));
-        if(this.currentFragmentIndex == 0){// && this.showNewArticles){
-            viewPagerFragment.loadArticles(this.articles);
+        ArrayList<Article> newArticles = dataSource.getAllArticles(0, Prefs.getValueForKey(this, Prefs.TAG_READ_SHOWN, false));
+
+        if (this.articles.size() == 0 || !this.articles.get(0).equals(newArticles.get(0))) {
+            this.articles = newArticles;
+            if (this.currentFragmentIndex == 0) {// && this.showNewArticles){
+                viewPagerFragment.loadArticles(this.articles);
+            }
+        } else {
+            viewPagerFragment.fadeIn();
         }
     }
 
@@ -254,7 +260,6 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
             "News",
             "Saved Articles",
             "Schedule",
-            "Article Sources",
     };
 
     private BaseAdapter menuAdapter = new BaseAdapter() {

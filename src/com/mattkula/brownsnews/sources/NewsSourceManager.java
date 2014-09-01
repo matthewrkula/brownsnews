@@ -68,8 +68,8 @@ public class NewsSourceManager {
 
     private void completeDownloadOperation(){
         Collections.sort(this.articles);
-        listener.onArticlesDownloaded();
         dataSource.close();
+        listener.onArticlesDownloaded();
     }
 
     public static ArrayList<NewsSource> getAllowedSources(Context context){
