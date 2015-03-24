@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
 import com.mattkula.brownsnews.MainActivity;
 import com.mattkula.brownsnews.Prefs;
 import com.mattkula.brownsnews.R;

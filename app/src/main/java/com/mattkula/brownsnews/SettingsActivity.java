@@ -1,15 +1,8 @@
 package com.mattkula.brownsnews;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.text.SpannableString;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,9 +11,8 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.mattkula.brownsnews.background.UpdateManager;
 
-import java.util.List;
+import com.mattkula.brownsnews.background.UpdateManager;
 
 /**
  * Created by matt on 4/2/14.

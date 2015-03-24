@@ -1,10 +1,10 @@
 package com.mattkula.brownsnews.background;
 
-import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
 import com.mattkula.brownsnews.Prefs;
 
 /**

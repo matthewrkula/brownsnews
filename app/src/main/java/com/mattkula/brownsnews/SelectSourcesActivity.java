@@ -3,11 +3,19 @@ package com.mattkula.brownsnews;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.*;
-import android.widget.*;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.mattkula.brownsnews.sources.NewsSource;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
-import com.mattkula.brownsnews.sources.RxNewsSource;
 
 /**
  * Created by matt on 3/30/14.
@@ -16,7 +24,7 @@ public class SelectSourcesActivity extends FragmentActivity {
 
     GridView gridView;
 
-    RxNewsSource[] sources = NewsSourceManager.sources;
+    NewsSource[] sources = NewsSourceManager.sources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +64,7 @@ public class SelectSourcesActivity extends FragmentActivity {
     private AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            RxNewsSource source = sources[i];
+            NewsSource source = sources[i];
             boolean isSelected = Prefs.isNewsSourceSelected(SelectSourcesActivity.this, source);
             view.setAlpha(isSelected ? .3f : 1f);
             Prefs.setValueForKey(SelectSourcesActivity.this, source.getName(), !isSelected);
@@ -85,7 +93,7 @@ public class SelectSourcesActivity extends FragmentActivity {
             if(v == null){
                 v = View.inflate(getApplicationContext(), R.layout.grid_item_news_source, null);
             }
-            RxNewsSource s = (RxNewsSource)getItem(i);
+            NewsSource s = (NewsSource)getItem(i);
 
             ((TextView)v.findViewById(R.id.grid_text)).setText(s.getName());
 

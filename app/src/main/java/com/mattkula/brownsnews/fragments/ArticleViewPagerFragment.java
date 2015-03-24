@@ -1,21 +1,23 @@
 package com.mattkula.brownsnews.fragments;
 
 import android.animation.Animator;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
-import com.mattkula.brownsnews.database.ArticleDataSource;
-import com.mattkula.brownsnews.sources.NewsSource;
 import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 
 import java.util.ArrayList;
