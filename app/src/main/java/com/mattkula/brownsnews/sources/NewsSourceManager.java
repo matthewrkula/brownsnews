@@ -8,19 +8,31 @@ import com.mattkula.brownsnews.database.ArticleDataSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
+import rx.Observable;
+import rx.Scheduler;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Matt on 3/27/14.
  */
 public class NewsSourceManager {
-    public static NewsSource[] sources = new NewsSource[]{
-            new DawgsByNatureNewsSource(),
-            new DawgPoundNationNewsSource(),
-            new WaitingForNextYearNewsSource(),
-            new ESPNNewsSource(),
-            new BrownsWebsiteNewsSource(),
+//    public static NewsSource[] sources = new NewsSource[]{
+//            new DawgsByNatureNewsSource(),
+//            new DawgPoundNationNewsSource(),
+//            new WaitingForNextYearNewsSource(),
+//            new ESPNNewsSource(),
+//            new BrownsWebsiteNewsSource(),
+//            new AkronBeaconNewsSource(),
+//            new PlainDealerNewsSource(),
+//    };
+    public static RxNewsSource[] sources = new RxNewsSource[]{
             new AkronBeaconNewsSource(),
-            new PlainDealerNewsSource(),
     };
 
     ArrayList<Article> articles;
@@ -31,7 +43,7 @@ public class NewsSourceManager {
     OnArticlesDownloadedListener listener;
     ArticleDataSource dataSource;
 
-    public void getAllArticles(OnArticlesDownloadedListener listener, Context c){
+    public void getAllArticles(final OnArticlesDownloadedListener listener, final Context c){
         dataSource = new ArticleDataSource(c);
         dataSource.open();
         this.listener = listener;
@@ -39,47 +51,57 @@ public class NewsSourceManager {
         counter = 0;
         numOfSources = 0;
 
-        for(int sourceCount=0; sourceCount < sources.length; sourceCount++){
-            numOfSources++;
-            sources[sourceCount].getLatestArticles(this);
-        }
+        Observable.from(sources)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<RxNewsSource, Observable<Article>>() {
+                    @Override
+                    public Observable<Article> call(RxNewsSource rxNewsSource) {
+                        return rxNewsSource.getLatestArticles();
+                    }
+                })
+                .doOnNext(new Action1<Article>() {
+                    @Override
+                    public void call(Article article) {
+                        dataSource.createOrGetArticle(article);
+                    }
+                })
+                .subscribe(new Subscriber<Article>() {
+                    @Override
+                    public void onCompleted() {
+                        dataSource.close();
+                        listener.onArticlesDownloaded();
+                    }
 
-        if(numOfSources == 0) listener.onArticlesDownloaded();
+                    @Override
+                    public void onError(Throwable e) {
+                        dataSource.close();
+                        listener.onArticlesDownloaded();
+                    }
+
+                    @Override
+                    public void onNext(Article article) {
+
+                    }
+                });
     }
 
-    public void addToArticles(ArrayList<Article> newArticles){
-        for(Article article : newArticles){
-            this.articles.add(dataSource.createOrGetArticle(article));
-        }
-
-        counter++;
-        if(counter == numOfSources){
-            completeDownloadOperation();
-        }
-    }
-
-    public void onError(NewsSource source){
-        Log.e("BROWNSERROR", source.getName() + " could not be downloaded.");
-        counter++;
-        if(counter == numOfSources){
-            completeDownloadOperation();
-        }
-    }
-
-    private void completeDownloadOperation(){
-        Collections.sort(this.articles);
-        dataSource.close();
-        listener.onArticlesDownloaded();
-    }
-
-    public static ArrayList<NewsSource> getAllowedSources(Context context){
-        ArrayList<NewsSource> allowedSources = new ArrayList<NewsSource>();
+    public static ArrayList<RxNewsSource> getAllowedSources(Context context){
+        ArrayList<RxNewsSource> allowedSources = new ArrayList<RxNewsSource>();
         for(int i=0; i < sources.length; i++){
             if(Prefs.isNewsSourceSelected(context, sources[i])){
                 allowedSources.add(sources[i]);
             }
         }
         return allowedSources;
+    }
+
+    public void addToArticles(List<Article> articles) {
+
+    }
+
+    public void onError(NewsSource source) {
+
     }
 
     public interface OnArticlesDownloadedListener {

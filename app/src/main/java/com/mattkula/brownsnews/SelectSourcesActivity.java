@@ -7,6 +7,7 @@ import android.view.*;
 import android.widget.*;
 import com.mattkula.brownsnews.sources.NewsSource;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
+import com.mattkula.brownsnews.sources.RxNewsSource;
 
 /**
  * Created by matt on 3/30/14.
@@ -15,7 +16,7 @@ public class SelectSourcesActivity extends FragmentActivity {
 
     GridView gridView;
 
-    NewsSource[] sources = NewsSourceManager.sources;
+    RxNewsSource[] sources = NewsSourceManager.sources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class SelectSourcesActivity extends FragmentActivity {
     private AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            NewsSource source = sources[i];
+            RxNewsSource source = sources[i];
             boolean isSelected = Prefs.isNewsSourceSelected(SelectSourcesActivity.this, source);
             view.setAlpha(isSelected ? .3f : 1f);
             Prefs.setValueForKey(SelectSourcesActivity.this, source.getName(), !isSelected);
@@ -84,7 +85,7 @@ public class SelectSourcesActivity extends FragmentActivity {
             if(v == null){
                 v = View.inflate(getApplicationContext(), R.layout.grid_item_news_source, null);
             }
-            NewsSource s = (NewsSource)getItem(i);
+            RxNewsSource s = (RxNewsSource)getItem(i);
 
             ((TextView)v.findViewById(R.id.grid_text)).setText(s.getName());
 

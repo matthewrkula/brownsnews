@@ -9,6 +9,7 @@ import android.util.Log;
 import com.mattkula.brownsnews.Prefs;
 import com.mattkula.brownsnews.sources.NewsSource;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
+import com.mattkula.brownsnews.sources.RxNewsSource;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -154,7 +155,7 @@ public class ArticleDataSource {
 
     private String getAllowedSourcesString(){
         StringBuilder builder = new StringBuilder();
-        ArrayList<NewsSource> allowedSources = NewsSourceManager.getAllowedSources(context);
+        ArrayList<RxNewsSource> allowedSources = NewsSourceManager.getAllowedSources(context);
         builder.append("(");
         for(int i=0; i < allowedSources.size(); i++){
             builder.append("'" + allowedSources.get(i).getName() + (i == allowedSources.size() - 1 ? "'" : "',"));

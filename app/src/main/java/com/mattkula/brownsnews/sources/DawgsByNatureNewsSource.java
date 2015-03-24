@@ -31,12 +31,17 @@ public class DawgsByNatureNewsSource implements NewsSource {
     }
 
     @Override
+    public String getURL() {
+        return "https://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://www.dawgsbynature.com/rss/current&num=20";
+    }
+
+    @Override
     public void getLatestArticles(final NewsSourceManager manager) {
 
         final ArrayList<Article> articles = new ArrayList<Article>();
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                "https://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://www.dawgsbynature.com/rss/current&num=20",
+                getURL(),
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {

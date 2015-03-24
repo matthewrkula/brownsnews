@@ -30,11 +30,16 @@ public class ESPNNewsSource implements NewsSource{
     }
 
     @Override
+    public String getURL() {
+        return "http://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://espn.go.com/blog/feed?blog=cleveland-browns&num=20";
+    }
+
+    @Override
     public void getLatestArticles(final NewsSourceManager manager) {
         final ArrayList<Article> articles = new ArrayList<Article>();
 
         Request request = new JsonObjectRequest(Request.Method.GET,
-                "http://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://espn.go.com/blog/feed?blog=cleveland-browns&num=20",
+                getURL(),
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {

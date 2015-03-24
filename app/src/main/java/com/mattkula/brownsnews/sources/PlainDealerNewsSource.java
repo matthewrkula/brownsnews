@@ -5,6 +5,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.mattkula.brownsnews.MyApplication;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
@@ -29,11 +30,16 @@ public class PlainDealerNewsSource implements NewsSource {
     }
 
     @Override
+    public String getURL() {
+        return "https://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://impact.cleveland.com/browns/atom.xml&num=8";
+    }
+
+    @Override
     public void getLatestArticles(final NewsSourceManager manager) {
         final ArrayList<Article> articles = new ArrayList<Article>();
 
         Request request = new JsonObjectRequest(Request.Method.GET,
-                "http://ajax.googleapis.com/ajax/services/feed/load?v=2.0&q=http://impact.cleveland.com/browns/atom.xml&num=8",
+                getURL(),
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
