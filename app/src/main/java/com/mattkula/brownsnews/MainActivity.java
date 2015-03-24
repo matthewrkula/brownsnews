@@ -26,6 +26,7 @@ import com.mattkula.brownsnews.sources.NewsSourceManager;
 import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 import com.mattkula.brownsnews.views.LoadingView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -200,7 +201,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     private void loadArticlesIntoFragment(){
         ArrayList<Article> newArticles = dataSource.getAllArticles(0, Prefs.getValueForKey(this, Prefs.TAG_READ_SHOWN, false));
 
-        if (this.articles.size() == 0 || !this.articles.get(0).equals(newArticles.get(0))) {
+        if (shouldRefreshViewPager(this.articles, newArticles)) {
             this.articles = newArticles;
             if (this.currentFragmentIndex == 0) {// && this.showNewArticles){
                 viewPagerFragment.loadArticles(this.articles);
@@ -208,6 +209,21 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         } else {
             viewPagerFragment.fadeIn();
         }
+    }
+
+    // Refresh view pager if the array lists have at least one different article
+    private boolean shouldRefreshViewPager(ArrayList<Article> oldArticles, ArrayList<Article> newArticles) {
+        if (oldArticles.size() != newArticles.size()) {
+            return true;
+        }
+
+        for (int i=0, n=newArticles.size(); i < n; i++) {
+            if (!oldArticles.get(i).equals(newArticles.get(i))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

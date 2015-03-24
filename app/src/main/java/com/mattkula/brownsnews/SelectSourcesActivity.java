@@ -40,7 +40,7 @@ public class SelectSourcesActivity extends FragmentActivity {
             case R.id.select_done:
                 setResult(RESULT_OK);
                 finish();
-                overridePendingTransition(0, 0);
+//                overridePendingTransition(0, 0);
                 return true;
         }
         return super.onOptionsItemSelected(item);

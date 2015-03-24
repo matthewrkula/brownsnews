@@ -89,30 +89,36 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         }
     }
 
-    public void loadArticles(final ArrayList<Article> articles){
-        this.articles = articles;
+    public void loadArticles(final ArrayList<Article> newArticles){
+        this.articles = newArticles;
 
         if(viewPager != null){
-            viewPager.setAdapter(new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
-                @Override
-                public Fragment getItem(int i) {
-                    ArticleFragment articleFragment = ArticleFragment.newInstance(articles.get(i));
-                    articleFragment.setSwipeRefreshLayoutEnabled(isSwipeToRefreshEnabled);
-                    articleFragment.setDelegate(ArticleViewPagerFragment.this);
-                    return articleFragment;
-                }
+            if (viewPager.getAdapter() == null) {
+                viewPager.setAdapter(new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
+                    @Override
+                    public Fragment getItem(int i) {
+                        ArticleFragment articleFragment = ArticleFragment.newInstance(articles.get(i));
+                        articleFragment.setSwipeRefreshLayoutEnabled(isSwipeToRefreshEnabled);
+                        articleFragment.setDelegate(ArticleViewPagerFragment.this);
+                        return articleFragment;
+                    }
 
-                @Override
-                public int getCount() {
-                    return articles.size();
-                }
+                    @Override
+                    public int getCount() {
+                        return articles.size();
+                    }
 
-                @Override
-                public int getItemPosition(Object object) {
-                    return POSITION_NONE;
-                }
-            });
-            viewPager.setCurrentItem(currentIndex);
+                    @Override
+                    public int getItemPosition(Object object) {
+                        return POSITION_NONE;
+                    }
+                });
+                currentIndex = 0;
+            } else {
+                viewPager.getAdapter().notifyDataSetChanged();
+                currentIndex = Math.min(currentIndex, newArticles.size() - 1);
+                viewPager.setCurrentItem(currentIndex);
+            }
         } else {
             Log.e("ASDF", "NULLLL");
         }
@@ -184,7 +190,7 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         public void transformPage(View view, float v) {
             CardView cardView = (CardView)view.findViewById(R.id.cardView);
             ImageView image = (ImageView)view.findViewById(R.id.article_image);
-            cardView.setTranslationX(600*v);
+            cardView.setTranslationX(600 * v);
             image.setTranslationX(-300*v);
         }
     };
