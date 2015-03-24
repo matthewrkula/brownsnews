@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
@@ -181,9 +182,9 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
     ViewPager.PageTransformer pageTransformer = new ViewPager.PageTransformer() {
         @Override
         public void transformPage(View view, float v) {
-            LinearLayout layout = (LinearLayout)view.findViewById(R.id.content);
+            CardView cardView = (CardView)view.findViewById(R.id.cardView);
             ImageView image = (ImageView)view.findViewById(R.id.article_image);
-            layout.setTranslationX(600*v);
+            cardView.setTranslationX(600*v);
             image.setTranslationX(-300*v);
         }
     };

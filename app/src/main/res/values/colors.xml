@@ -2,4 +2,5 @@
 <resources>
     <color name="primary_light">#FFE34912</color>
     <color name="primary_dark">#FF26201E</color>
+    <color name="background_orange">#FFF36A24</color>
 </resources>

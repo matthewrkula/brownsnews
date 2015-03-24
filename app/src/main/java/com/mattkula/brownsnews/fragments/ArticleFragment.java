@@ -132,7 +132,15 @@ public class ArticleFragment extends Fragment {
         scrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
             @Override
             public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
-
+                articleImage.setTranslationY(-t * .3f);
+            }
+        });
+        scrollView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                scrollView.getViewTreeObserver().removeOnPreDrawListener(this);
+                scrollView.setPadding(0, articleImage.getHeight() - 80, 0, 0);
+                return false;
             }
         });
 

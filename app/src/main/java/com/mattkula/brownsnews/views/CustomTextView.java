@@ -5,9 +5,6 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-/**
- * Created by matt on 2/23/14.
- */
 public class CustomTextView extends TextView {
 
     static Typeface typeface;
@@ -24,6 +21,10 @@ public class CustomTextView extends TextView {
     }
 
     private void init(){
+        if (isInEditMode()) {
+            return;
+        }
+
         if(typeface == null){
             typeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/Sentinel-Bold.ttf");
         }
