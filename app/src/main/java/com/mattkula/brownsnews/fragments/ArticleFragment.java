@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -96,15 +97,6 @@ public class ArticleFragment extends Fragment {
 
         });
 
-        final GestureDetector detector = new GestureDetector(gestureListener);
-        articleImage.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                detector.onTouchEvent(motionEvent);
-                return true;
-            }
-        });
-
         imageRead.setAlpha(article.isRead ? 1f : 0f);
 
         textAuthor.setText("By: " + article.author + " on " + article.publishedDate.toLocaleString());
@@ -143,6 +135,13 @@ public class ArticleFragment extends Fragment {
                 return false;
             }
         });
+        final GestureDetector detector = new GestureDetector(getActivity(), gestureListener);
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, @NonNull MotionEvent motionEvent) {
+                return detector.onTouchEvent(motionEvent);
+            }
+        });
 
         return v;
     }
@@ -176,29 +175,29 @@ public class ArticleFragment extends Fragment {
             dataSource.saveArticle(article);
             textSaved.setText(article.isSaved ? "Saved" : "Removed");
             animateStatusText();
-            return super.onDoubleTap(e);
+            return true;
         }
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.e("ASDF", "Swiped down on " + article.title);
-            if(velocityY > 0 && Math.abs(velocityX) < Math.abs(velocityY)){
-                dataSource.readArticle(article);
-                if(article.isRead){
-                    if(Prefs.getValueForKey(getActivity(), Prefs.TAG_READ_SHOWN, false)){
-                        textSaved.setText("Read");
-                        animateStatusText();
-                        imageRead.setAlpha(1f);
-                    } else {
-                        animateFlyDown();
-                    }
-                } else {
-                    textSaved.setText("Unread");
-                    animateStatusText();
-                    imageRead.setAlpha(0f);
-                }
-                return true;
-            }
+//            Log.e("ASDF", "Swiped down on " + article.title);
+//            if(velocityY > 0 && Math.abs(velocityX) < Math.abs(velocityY)){
+//                dataSource.readArticle(article);
+//                if(article.isRead){
+//                    if(Prefs.getValueForKey(getActivity(), Prefs.TAG_READ_SHOWN, false)){
+//                        textSaved.setText("Read");
+//                        animateStatusText();
+//                        imageRead.setAlpha(1f);
+//                    } else {
+//                        animateFlyDown();
+//                    }
+//                } else {
+//                    textSaved.setText("Unread");
+//                    animateStatusText();
+//                    imageRead.setAlpha(0f);
+//                }
+//                return true;
+//            }
             return super.onFling(e1, e2, velocityX, velocityY);
         }
     };
