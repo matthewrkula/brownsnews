@@ -65,7 +65,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
 
         if(!Prefs.getValueForKey(this, Prefs.TAG_LATEST_UPDATE, "0").equals(Prefs.VERSION)){
-            showUpdateDialog();
+//            showUpdateDialog();
             Prefs.setValueForKey(this, Prefs.TAG_LATEST_UPDATE, Prefs.VERSION);
         }
 

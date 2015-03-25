@@ -86,11 +86,11 @@ public class ArticleFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                ((SwipeRefreshLayout.OnRefreshListener)getActivity()).onRefresh();
+                ((SwipeRefreshLayout.OnRefreshListener) getActivity()).onRefresh();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-        swipeRefreshLayout.setColorScheme(R.color.primary_light, R.color.primary_light, R.color.primary_dark, R.color.primary_light);
+        swipeRefreshLayout.setColorSchemeColors(R.color.primary_light, R.color.primary_light, R.color.primary_dark, R.color.primary_light);
         swipeRefreshLayout.setEnabled(isSwipeToRefreshEnabled);
 
         textTitle.setText(article.title);

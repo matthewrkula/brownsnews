@@ -79,7 +79,7 @@ public class Article implements Serializable, Comparable<Article>{
     }
 
     private static String getCleanContent(String content){
-        content = content.replaceAll("<img.*>", "");
+        content = content.replaceAll("<img.*?>", "");
 //        content = content.replaceAll("</?a(|\\s+[^>]+)>", "");
         return content;
     }

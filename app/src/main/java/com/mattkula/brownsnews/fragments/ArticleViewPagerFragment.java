@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mattkula.brownsnews.R;
@@ -22,9 +20,6 @@ import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 
 import java.util.ArrayList;
 
-/**
- * Created by matt on 3/30/14.
- */
 public class ArticleViewPagerFragment extends Fragment implements ArticleFragment.ArticleViewPagerDelegate {
 
     public ViewPager viewPager;
@@ -191,7 +186,7 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         @Override
         public void transformPage(View view, float v) {
 //            view.findViewById(R.id.cardView).setTranslationX(600 * v);
-            view.findViewById(R.id.article_header).setTranslationX(200 * v);
+            view.findViewById(R.id.article_header).setTranslationX(300 * v);
         }
     };
 }
