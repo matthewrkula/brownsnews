@@ -34,7 +34,9 @@ public abstract class NewsSource {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         try {
-                            JSONArray entries = jsonObject.getJSONObject("responseData").getJSONObject("feed").getJSONArray("entries");
+                            JSONArray entries = jsonObject.getJSONObject("responseData")
+                                                          .getJSONObject("feed")
+                                                          .getJSONArray("entries");
 
                             for(int i =0; i < entries.length(); i++){
                                 JSONObject entry = entries.getJSONObject(i);

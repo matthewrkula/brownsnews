@@ -1,5 +1,6 @@
 package com.mattkula.brownsnews.database;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by matt on 3/27/14.
@@ -46,7 +48,7 @@ public class Article implements Serializable, Comparable<Article>{
             article.isRead = false;
             article.isSaved = false;
         } catch (JSONException e){
-
+            Log.e("ERROR", e.getLocalizedMessage());
         }
 
         return article;
@@ -59,7 +61,7 @@ public class Article implements Serializable, Comparable<Article>{
                 cats.add(array.getString(i).toLowerCase());
             }
         } catch (Exception e){
-           Log.e("ASDF", e.toString());
+           Log.e("ERROR", e.toString());
         }
         return cats;
     }
@@ -68,10 +70,12 @@ public class Article implements Serializable, Comparable<Article>{
         if(content.contains("<img")){
             int start = content.indexOf("src=") + 5;
             int end = content.indexOf("\"", start);
-            return content.substring(start, end);
-        } else {
-            return "none";
+            String url = content.substring(start, end);
+            if (url.startsWith("http")) {
+                return url;
+            }
         }
+        return "none";
     }
 
     private static String getCleanContent(String content){
@@ -81,17 +85,16 @@ public class Article implements Serializable, Comparable<Article>{
     }
 
     private static Date getDate(String content){
-        DateFormat formatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZZZ");
+        DateFormat formatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZZZ", Locale.US);
         try {
-            Date date = formatter.parse(content);
-            return date;
+            return formatter.parse(content);
         } catch (ParseException e) {
             return new Date(1000, 10, 30);
         }
     }
 
     @Override
-    public int compareTo(Article article) {
+    public int compareTo(@NonNull Article article) {
         return article.publishedDate.compareTo(this.publishedDate);
     }
 

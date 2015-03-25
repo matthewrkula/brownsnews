@@ -24,17 +24,17 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.database.ArticleDataSource;
 import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 import com.mattkula.brownsnews.views.NotifyingScrollView;
-import com.squareup.picasso.Picasso;
 
 
-/**
- * Created by matt on 3/27/14.
- */
 public class ArticleFragment extends Fragment {
 
     Article article;
@@ -115,10 +115,8 @@ public class ArticleFragment extends Fragment {
         textContent.animate().alpha(1).setDuration(300);
 
         if(!article.imageUrl.equals("none")){
-            Picasso.with(getActivity())
+            Glide.with(this)
                     .load(article.imageUrl)
-                    .fit()
-                    .centerCrop()
                     .into(articleImage);
         } else {
             double d = Math.random();

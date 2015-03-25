@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Browns News</string>
+    <string name="article_saved">Saved</string>
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum orci sem, vel facilisis enim facilisis ac.
+        Aliquam magna magna, hendrerit sed quam lobortis, facilisis laoreet nisl. Sed pellentesque dictum eros, eu luctus massa congue a.
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec vitae accumsan risus.
+        Morbi viverra risus in semper scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis eleifend a nunc nec congue.
+    </string>
 </resources>

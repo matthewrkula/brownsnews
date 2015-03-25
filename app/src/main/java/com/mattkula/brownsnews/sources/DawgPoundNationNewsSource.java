@@ -22,7 +22,6 @@ public class DawgPoundNationNewsSource extends NewsSource {
 
     @Override
     public void makeModifications(Article article) {
-        article.imageUrl = "non";
         article.content = article.content.replaceAll("width:\\d+px", "");
         article.content = article.content.replaceAll("margin-left:\\d+px;", "");
     }
