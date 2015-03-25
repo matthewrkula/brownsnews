@@ -21,13 +21,11 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.database.ArticleDataSource;
@@ -39,6 +37,7 @@ public class ArticleFragment extends Fragment {
 
     Article article;
     ImageView articleImage;
+    RelativeLayout articleHeader;
     TextView textTitle;
     TextView textAuthor;
     TextView textSource;
@@ -82,6 +81,7 @@ public class ArticleFragment extends Fragment {
         textSaved = (TextView)v.findViewById(R.id.saved_text);
         imageRead = (ImageView)v.findViewById(R.id.image_read);
         swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe_container);
+        articleHeader = (RelativeLayout)v.findViewById(R.id.article_header);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -108,11 +108,11 @@ public class ArticleFragment extends Fragment {
         textAuthor.setText("By: " + article.author + " on " + article.publishedDate.toLocaleString());
         textSource.setText("Via: " + article.newsSource);
 
+        textContent.setAlpha(1);
         textContent.getSettings().setUseWideViewPort(false);
         textContent.setBackgroundColor(Color.argb(1, 0, 0, 0));
         textContent.setBackgroundResource(R.color.primary_dark);
         textContent.loadData(getStyle(article.content), "text/html; charset=UTF-8", null);
-        textContent.animate().alpha(1).setDuration(300);
 
         if(!article.imageUrl.equals("none")){
             Glide.with(this)
@@ -121,21 +121,22 @@ public class ArticleFragment extends Fragment {
         } else {
             double d = Math.random();
             articleImage.setImageDrawable((getResources().getDrawable(d > 0.5 ? R.drawable.browns_dog : R.drawable.brownie)));
-            articleImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            articleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            v.findViewById(R.id.article_image_shadow).setVisibility(View.GONE);
         }
 
         scrollView = (NotifyingScrollView)v.findViewById(R.id.scrollview);
         scrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
             @Override
             public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
-                articleImage.setTranslationY(-t * .3f);
+                articleHeader.setTranslationY(-t * .2f);
             }
         });
         scrollView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
                 scrollView.getViewTreeObserver().removeOnPreDrawListener(this);
-                scrollView.setPadding(0, articleImage.getHeight() - 80, 0, 0);
+                scrollView.setPadding(0, articleImage.getHeight() - 80, 0, 20);
                 return false;
             }
         });

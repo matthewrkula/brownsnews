@@ -17,9 +17,6 @@ import android.widget.TextView;
 import com.mattkula.brownsnews.sources.NewsSource;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
 
-/**
- * Created by matt on 3/30/14.
- */
 public class SelectSourcesActivity extends FragmentActivity {
 
     GridView gridView;

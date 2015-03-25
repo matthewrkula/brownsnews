@@ -190,10 +190,8 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
     ViewPager.PageTransformer pageTransformer = new ViewPager.PageTransformer() {
         @Override
         public void transformPage(View view, float v) {
-            CardView cardView = (CardView)view.findViewById(R.id.cardView);
-            ImageView image = (ImageView)view.findViewById(R.id.article_image);
-            cardView.setTranslationX(600 * v);
-            image.setTranslationX(-300*v);
+//            view.findViewById(R.id.cardView).setTranslationX(600 * v);
+            view.findViewById(R.id.article_header).setTranslationX(200 * v);
         }
     };
 }

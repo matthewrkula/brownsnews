@@ -16,9 +16,12 @@
         android:weightSum="3">
 
         <RelativeLayout
+            android:id="@+id/article_header"
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <ImageView
                 android:id="@+id/article_image"
@@ -26,6 +29,14 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 tools:src="@drawable/crowd"
+                />
+
+            <View
+                android:id="@+id/article_image_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@drawable/black_gradient"
+                android:layout_alignParentBottom="true"
                 />
 
             <com.mattkula.brownsnews.views.CustomTextView
@@ -86,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/primary_dark"
                 android:layout_margin="10dp"
+                android:animateLayoutChanges="true"
                 app:cardBackgroundColor="@color/primary_dark"
                 app:contentPadding="3dp"
                 app:cardElevation="8dp"
