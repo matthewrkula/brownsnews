@@ -66,8 +66,6 @@ public class ArticleFragment extends Fragment {
         return myFragment;
     }
 
-    int top = -1;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_article, container, false);
@@ -86,6 +84,8 @@ public class ArticleFragment extends Fragment {
         imageRead = (ImageView)v.findViewById(R.id.image_read);
         swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe_container);
         articleHeader = (RelativeLayout)v.findViewById(R.id.article_header);
+
+        // Tags are set for ViewPager Transformer caching (mock ViewHolder pattern)
         v.setTag(articleHeader);
         articleHeader.setTag(articleImage);
 
