@@ -86,6 +86,8 @@ public class ArticleFragment extends Fragment {
         imageRead = (ImageView)v.findViewById(R.id.image_read);
         swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe_container);
         articleHeader = (RelativeLayout)v.findViewById(R.id.article_header);
+        v.setTag(articleHeader);
+        articleHeader.setTag(articleImage);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -146,7 +148,7 @@ public class ArticleFragment extends Fragment {
             @Override
             public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
                 articleHeader.setTranslationY(-t * .2f);
-//                articleImage.setTranslationY(-t * .2f);
+                articleImage.setTranslationY(t * .1f);
             }
         });
         scrollView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
