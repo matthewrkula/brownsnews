@@ -28,6 +28,7 @@ import com.mattkula.brownsnews.background.UpdateManager;
 import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.database.ArticleDataSource;
 import com.mattkula.brownsnews.fragments.ArticleViewPagerFragment;
+import com.mattkula.brownsnews.fragments.EmptyFragment;
 import com.mattkula.brownsnews.fragments.ScheduleFragment;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
 import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
@@ -49,6 +50,8 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     ArticleViewPagerFragment viewPagerFragment;
     ArticleViewPagerFragment savedArticleFragment;
     ScheduleFragment scheduleFragment;
+    EmptyFragment emptyFragment;
+
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
 
@@ -78,6 +81,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
         viewPagerFragment = ArticleViewPagerFragment.newInstance(null, true);
         scheduleFragment = new ScheduleFragment();
+        emptyFragment = new EmptyFragment();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, viewPagerFragment)
@@ -339,9 +343,9 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
                             .commit();
                     break;
                 case 2:
-                    scheduleFragment = new ScheduleFragment();
+//                    scheduleFragment = new ScheduleFragment();
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, scheduleFragment)
+                            .replace(R.id.fragment_container, emptyFragment)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit();
                     getSupportFragmentManager().executePendingTransactions();

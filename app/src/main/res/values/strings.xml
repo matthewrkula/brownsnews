@@ -8,4 +8,8 @@
         Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec vitae accumsan risus.
         Morbi viverra risus in semper scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis eleifend a nunc nec congue.
     </string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="coming_soon">COMING SOON</string>
 </resources>

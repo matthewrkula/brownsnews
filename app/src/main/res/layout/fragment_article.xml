@@ -31,12 +31,21 @@
                 tools:src="@drawable/crowd"
                 />
 
+            <!--<View-->
+                <!--android:id="@+id/article_image_shadow"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:background="@drawable/black_gradient"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--/>-->
+
             <View
                 android:id="@+id/article_image_shadow"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:background="@drawable/black_gradient"
-                android:layout_alignParentBottom="true"
+                android:layout_height="match_parent"
+                android:background="@drawable/shadow"
+                android:alpha="0"
+                tools:alpha="1"
                 />
 
             <com.mattkula.brownsnews.views.CustomTextView

@@ -2,6 +2,7 @@ package com.mattkula.brownsnews.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mattkula.brownsnews.R;
+import com.mattkula.brownsnews.views.CustomTextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by matt on 3/30/14.
- */
-public class ScheduleFragment extends ListFragment{
+public class ScheduleFragment extends ListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,34 +28,36 @@ public class ScheduleFragment extends ListFragment{
         super.onResume();
         getListView().setPadding(0, getActivity().getActionBar().getHeight(), 0, 0);
         getListView().setBackgroundColor(getResources().getColor(R.color.primary_dark));
+        getListView().setDivider(null);
+        getListView().setDividerHeight(0);
     }
 
     private ArrayList<Game> schedule = new ArrayList<Game>(){{
-        add(new Game("Steelers", R.drawable.pit, "Sep 07 1:00 PM", false));
-        add(new Game("Saints", R.drawable.no, "Sep 14 1:00 PM", true));
-        add(new Game("Ravens", R.drawable.bal, "Sep 21 1:00 PM", true));
-        add(new Game("BYE WEEK", 0, "", true));
-        add(new Game("Titans", R.drawable.ten, "Oct 05 1:00 PM", false));
-        add(new Game("Steelers", R.drawable.pit, "Oct 12 1:00 PM", true));
-        add(new Game("Jaguars", R.drawable.jax, "Oct 19 1:00 PM", false));
-        add(new Game("Raiders", R.drawable.oak, "Oct 26 4:25 PM", true));
-        add(new Game("Buccaneers", R.drawable.tb, "Nov 02 1:00 PM", true));
-        add(new Game("Bengals", R.drawable.cin, "Nov 06 8:25 PM", false));
-        add(new Game("Texans", R.drawable.hou, "Nov 16 1:00 PM", true));
-        add(new Game("Falcons", R.drawable.atl, "Nov 23 1:00 PM", false));
-        add(new Game("Bills", R.drawable.buf, "Nov 30 1:00 PM", false));
-        add(new Game("Colts", R.drawable.ind, "Dec 07 1:00 PM", true));
-        add(new Game("Bengals", R.drawable.cin, "Dec 14 1:00 PM", true));
-        add(new Game("Panthers", R.drawable.car, "Dec 21 1:00 PM", false));
-        add(new Game("Ravens", R.drawable.bal, "Dec 28 1:00 PM", false));
+//        add(new Game("", 0, "", false));
+//        add(new Game("", 0, "", true));
+//        add(new Game("", 0, "", true));
+//        add(new Game("COMING SOON", 0, "", true));
+//        add(new Game("Titans", R.drawable.ten, "Oct 05 1:00 PM", false));
+//        add(new Game("Steelers", R.drawable.pit, "Oct 12 1:00 PM", true));
+//        add(new Game("Jaguars", R.drawable.jax, "Oct 19 1:00 PM", false));
+//        add(new Game("Raiders", R.drawable.oak, "Oct 26 4:25 PM", true));
+//        add(new Game("Buccaneers", R.drawable.tb, "Nov 02 1:00 PM", true));
+//        add(new Game("Bengals", R.drawable.cin, "Nov 06 8:25 PM", false));
+//        add(new Game("Texans", R.drawable.hou, "Nov 16 1:00 PM", true));
+//        add(new Game("Falcons", R.drawable.atl, "Nov 23 1:00 PM", false));
+//        add(new Game("Bills", R.drawable.buf, "Nov 30 1:00 PM", false));
+//        add(new Game("Colts", R.drawable.ind, "Dec 07 1:00 PM", true));
+//        add(new Game("Bengals", R.drawable.cin, "Dec 14 1:00 PM", true));
+//        add(new Game("Panthers", R.drawable.car, "Dec 21 1:00 PM", false));
+//        add(new Game("Ravens", R.drawable.bal, "Dec 28 1:00 PM", false));
     }};
 
     private class Game {
 
-        String opponent;
-        int opponentImage;
-        String time;
         boolean home;
+        int opponentImage;
+        String opponent;
+        String time;
 
         public Game(String o, int oi, String t, boolean h){
             this.opponent = o;
@@ -67,7 +68,8 @@ public class ScheduleFragment extends ListFragment{
 
         @Override
         public String toString() {
-            return (this.home ? "" : "@ ") + opponent;
+            //TODO Add @ symbol back
+            return (this.home ? "" : " ") + opponent;
         }
     }
 

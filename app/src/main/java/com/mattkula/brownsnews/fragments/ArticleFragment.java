@@ -3,6 +3,7 @@ package com.mattkula.brownsnews.fragments;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
@@ -26,6 +27,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.database.ArticleDataSource;
@@ -117,12 +121,24 @@ public class ArticleFragment extends Fragment {
         if(!article.imageUrl.equals("none")){
             Glide.with(this)
                     .load(article.imageUrl)
+                    .asBitmap()
+                    .listener(new RequestListener<String, Bitmap>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            v.findViewById(R.id.article_image_shadow).animate().alpha(1).start();
+                            return false;
+                        }
+                    })
                     .into(articleImage);
         } else {
             double d = Math.random();
             articleImage.setImageDrawable((getResources().getDrawable(d > 0.5 ? R.drawable.browns_dog : R.drawable.brownie)));
             articleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            v.findViewById(R.id.article_image_shadow).setVisibility(View.GONE);
         }
 
         scrollView = (NotifyingScrollView)v.findViewById(R.id.scrollview);
@@ -130,6 +146,7 @@ public class ArticleFragment extends Fragment {
             @Override
             public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
                 articleHeader.setTranslationY(-t * .2f);
+//                articleImage.setTranslationY(-t * .2f);
             }
         });
         scrollView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
