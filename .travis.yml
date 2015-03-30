@@ -4,6 +4,7 @@ android:
   components:
     - build-tools-21.1.2
     - android-21
+    - extra-android-support
 
 script:
     - echo "Travis branch is $TRAVIS_BRANCH"
