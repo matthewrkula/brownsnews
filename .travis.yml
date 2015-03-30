@@ -8,4 +8,4 @@ android:
 
 script:
     - echo "Travis branch is $TRAVIS_BRANCH"
-    - ./gradlew build
+    - gradle build
