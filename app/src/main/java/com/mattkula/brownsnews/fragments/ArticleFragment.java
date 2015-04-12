@@ -33,6 +33,7 @@ import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.database.ArticleDataSource;
 import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
+import com.mattkula.brownsnews.utils.ViewUtils;
 import com.mattkula.brownsnews.views.NotifyingScrollView;
 
 import butterknife.ButterKnife;
@@ -118,6 +119,7 @@ public class ArticleFragment extends Fragment {
             Glide.with(this)
                     .load(article.imageUrl)
                     .asBitmap()
+                    .placeholder(R.drawable.browns_dog)
                     .listener(new RequestListener<String, Bitmap>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
@@ -148,7 +150,7 @@ public class ArticleFragment extends Fragment {
             @Override
             public boolean onPreDraw() {
                 scrollView.getViewTreeObserver().removeOnPreDrawListener(this);
-                scrollView.setPadding(0, articleImage.getHeight() - 80, 0, 20);
+                scrollView.setPadding(0, (int)(articleImage.getHeight() - ViewUtils.convertDpToPixel(40, getActivity())), 0, 20);
                 return false;
             }
         });

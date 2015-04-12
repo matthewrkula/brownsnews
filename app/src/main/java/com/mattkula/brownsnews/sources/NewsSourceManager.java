@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -41,6 +42,12 @@ public class NewsSourceManager {
                         return newsSource.getLatestArticles();
                     }
                 })
+                .doOnNext(new Action1<Article>() {
+                    @Override
+                    public void call(Article article) {
+                        dataSource.createOrGetArticle(article);
+                    }
+                })
                 .subscribe(new Subscriber<Article>() {
                     @Override
                     public void onCompleted() {
@@ -55,9 +62,7 @@ public class NewsSourceManager {
                     }
 
                     @Override
-                    public void onNext(Article article) {
-                        dataSource.createOrGetArticle(article);
-                    }
+                    public void onNext(Article article) {}
                 });
     }
 
