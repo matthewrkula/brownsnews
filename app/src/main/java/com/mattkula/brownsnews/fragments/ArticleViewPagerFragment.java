@@ -20,10 +20,17 @@ import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class ArticleViewPagerFragment extends Fragment implements ArticleFragment.ArticleViewPagerDelegate {
 
-    public ViewPager viewPager;
-    TextView textEmpty;
+    public static final String TAG_ARTICLES = "articles";
+    public static final String TAG_HAS_OPTIONS = "hasOptions";
+
+    @InjectView(R.id.view_pager_fragment) ViewPager viewPager;
+    @InjectView(R.id.text_empty) TextView textEmpty;
+
     ArrayList<Article> articles;
 
     String mainText = "No Articles to Read";
@@ -34,12 +41,11 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
     private int currentIndex = 0;
 
     public static ArticleViewPagerFragment newInstance(ArrayList<Article> articles, boolean hasOptionsMenu){
-
         ArticleViewPagerFragment fragment = new ArticleViewPagerFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable("articles", articles);
-        args.putSerializable("hasOptions", hasOptionsMenu);
+        args.putSerializable(TAG_ARTICLES, articles);
+        args.putSerializable(TAG_HAS_OPTIONS, hasOptionsMenu);
         fragment.setArguments(args);
 
         return fragment;
@@ -48,12 +54,11 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_article_view_pager, container, false);
+        ButterKnife.inject(this, v);
 
-        viewPager = (ViewPager)v.findViewById(R.id.view_pager_fragment);
         viewPager.setPageTransformer(false, pageTransformer);
-        textEmpty = (TextView)v.findViewById(R.id.text_empty);
 
-        ArrayList<Article> bundleArticles = (ArrayList<Article>)getArguments().getSerializable("articles");
+        ArrayList<Article> bundleArticles = (ArrayList<Article>)getArguments().getSerializable(TAG_ARTICLES);
 
         if(bundleArticles != null){
             loadArticles(bundleArticles);
@@ -62,7 +67,7 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
             loadArticles(new ArrayList<Article>());
         }
 
-        boolean hasOptionsMenu = getArguments().getBoolean("hasOptions");
+        boolean hasOptionsMenu = getArguments().getBoolean(TAG_HAS_OPTIONS);
         setHasOptionsMenu(hasOptionsMenu);
 
         myText = hasOptionsMenu ? mainText : savedText;

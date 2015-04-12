@@ -26,13 +26,11 @@ public class NewsSourceManager {
             new PlainDealerNewsSource(),
     };
 
-    OnArticlesDownloadedListener listener;
     ArticleDataSource dataSource;
 
     public void getAllArticles(final OnArticlesDownloadedListener listener, Context c){
         dataSource = new ArticleDataSource(c);
         dataSource.open();
-        this.listener = listener;
 
         Observable.from(sources)
                 .subscribeOn(Schedulers.io())
@@ -74,7 +72,7 @@ public class NewsSourceManager {
     }
 
     public interface OnArticlesDownloadedListener {
-        public void onArticlesDownloaded();
+        void onArticlesDownloaded();
     }
 
 }

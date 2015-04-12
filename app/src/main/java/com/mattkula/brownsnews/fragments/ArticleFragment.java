@@ -28,7 +28,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
@@ -36,31 +35,36 @@ import com.mattkula.brownsnews.database.ArticleDataSource;
 import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
 import com.mattkula.brownsnews.views.NotifyingScrollView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 public class ArticleFragment extends Fragment {
 
+    public static final String TAG_ARTICLE = "article";
+
     Article article;
-    ImageView articleImage;
-    RelativeLayout articleHeader;
-    TextView textTitle;
-    TextView textAuthor;
-    TextView textSource;
-    TextView textSaved;
-    WebView textContent;
-    ImageView imageRead;
-    NotifyingScrollView scrollView;
-    SwipeRefreshLayout swipeRefreshLayout;
-    boolean isSwipeToRefreshEnabled = true;
-
     ArticleDataSource dataSource;
-
     ArticleViewPagerDelegate delegate;
+
+    @InjectView(R.id.article_image) ImageView articleImage;
+    @InjectView(R.id.article_header) RelativeLayout articleHeader;
+    @InjectView(R.id.article_title) TextView textTitle;
+    @InjectView(R.id.article_author) TextView textAuthor;
+    @InjectView(R.id.article_source) TextView textSource;
+    @InjectView(R.id.saved_text) TextView textSaved;
+    @InjectView(R.id.article_content) WebView textContent;
+    @InjectView(R.id.image_read) ImageView imageRead;
+    @InjectView(R.id.scrollview) NotifyingScrollView scrollView;
+    @InjectView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
+
+    boolean isSwipeToRefreshEnabled = true;
 
     public static ArticleFragment newInstance(Article article) {
         ArticleFragment myFragment = new ArticleFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable("article", article);
+        args.putSerializable(TAG_ARTICLE, article);
         myFragment.setArguments(args);
 
         return myFragment;
@@ -69,21 +73,11 @@ public class ArticleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_article, container, false);
+        ButterKnife.inject(this, v);
 
-        dataSource = new ArticleDataSource(getActivity());
-        dataSource.open();
+        dataSource = new ArticleDataSource(getActivity()).open();
 
-        this.article = (Article)getArguments().getSerializable("article");
-
-        articleImage = (ImageView)v.findViewById(R.id.article_image);
-        textTitle = (TextView)v.findViewById(R.id.article_title);
-        textAuthor = (TextView)v.findViewById(R.id.article_author);
-        textSource = (TextView)v.findViewById(R.id.article_source);
-        textContent = (WebView)v.findViewById(R.id.article_content);
-        textSaved = (TextView)v.findViewById(R.id.saved_text);
-        imageRead = (ImageView)v.findViewById(R.id.image_read);
-        swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe_container);
-        articleHeader = (RelativeLayout)v.findViewById(R.id.article_header);
+        this.article = (Article)getArguments().getSerializable(TAG_ARTICLE);
 
         // Tags are set for ViewPager Transformer caching (mock ViewHolder pattern)
         v.setTag(articleHeader);
@@ -143,7 +137,6 @@ public class ArticleFragment extends Fragment {
             articleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
 
-        scrollView = (NotifyingScrollView)v.findViewById(R.id.scrollview);
         scrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
             @Override
             public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {

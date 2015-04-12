@@ -13,9 +13,6 @@ import com.mattkula.brownsnews.sources.NewsSourceManager;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * Created by matt on 4/3/14.
- */
 public class ArticleDataSource {
 
     ArticleSQLiteHelper helper;
@@ -27,8 +24,9 @@ public class ArticleDataSource {
         this.context = context;
     }
 
-    public void open() throws SQLiteException {
+    public ArticleDataSource open() throws SQLiteException {
         database = helper.getWritableDatabase();
+        return this;
     }
 
     public void close() {

@@ -22,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.mattkula.brownsnews.background.UpdateManager;
 import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.database.ArticleDataSource;
@@ -36,24 +34,25 @@ import com.mattkula.brownsnews.views.LoadingView;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class MainActivity extends FragmentActivity implements NewsSourceManager.OnArticlesDownloadedListener, SwipeRefreshLayout.OnRefreshListener{
 
-    RequestQueue requestQueue;
     ArrayList<Article> articles = new ArrayList<Article>();
 
-    LoadingView loadingView;
-    ImageView tutorialArrow;
-    ImageView tutorialArrowDown;
-    View tutorialView;
-    ListView menu;
+    @InjectView(R.id.loading_view) LoadingView loadingView;
+    @InjectView(R.id.tutorial_arrow) ImageView tutorialArrow;
+    @InjectView(R.id.tutorial_arrow_pull) ImageView tutorialArrowDown;
+    @InjectView(R.id.tutorial_view) View tutorialView;
+    @InjectView(R.id.sliding_menu) ListView menu;
+    @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    ActionBarDrawerToggle drawerToggle;
 
     ArticleViewPagerFragment viewPagerFragment;
     ArticleViewPagerFragment savedArticleFragment;
     ScheduleFragment scheduleFragment;
     EmptyFragment emptyFragment;
-
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle drawerToggle;
 
     int currentFragmentIndex = 0;
     boolean showNewArticles = true;
@@ -63,13 +62,15 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
-        TextView yourTextView = (TextView) findViewById(titleId);
-        yourTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
+        ButterKnife.inject(this);
 
-        if(!Prefs.getValueForKey(this, Prefs.TAG_LATEST_UPDATE, "0").equals(Prefs.VERSION)){
+        int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        TextView actionBarTextview = (TextView)findViewById(titleId);
+        actionBarTextview.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
+
+        if(!Prefs.getValueForKey(this, Prefs.TAG_LATEST_UPDATE, "0").equals(BuildConfig.VERSION_NAME)){
 //            showUpdateDialog();
-            Prefs.setValueForKey(this, Prefs.TAG_LATEST_UPDATE, Prefs.VERSION);
+            Prefs.setValueForKey(this, Prefs.TAG_LATEST_UPDATE, BuildConfig.VERSION_NAME);
         }
 
         dataSource = new ArticleDataSource(this);
@@ -88,29 +89,17 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
 
-        loadingView = (LoadingView)findViewById(R.id.loading_view);
-        tutorialView = findViewById(R.id.tutorial_view);
         tutorialView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                view.animate().alpha(0).setListener(new SimpleAnimatorListener() {
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        view.setVisibility(View.GONE);
-                    }
-                });
             }
         });
 
-        tutorialArrow = (ImageView)findViewById(R.id.tutorial_arrow);
-        tutorialArrowDown = (ImageView)findViewById(R.id.tutorial_arrow_pull);
         setUpArrowAnimations();
 
-        menu = (ListView)findViewById(R.id.sliding_menu);
         menu.setAdapter(menuAdapter);
         menu.setOnItemClickListener(menuItemClickListener);
 
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.app_name, R.string.app_name) {
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -128,7 +117,18 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        requestQueue = Volley.newRequestQueue(this);
+        tutorialView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                view.animate().alpha(0).setListener(new SimpleAnimatorListener() {
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        view.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+
         UpdateManager.rescheduleUpdates(this);
 
         loadArticles(false);

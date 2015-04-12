@@ -2,7 +2,6 @@ package com.mattkula.brownsnews.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mattkula.brownsnews.R;
-import com.mattkula.brownsnews.views.CustomTextView;
 
 import java.util.ArrayList;
 
@@ -98,7 +96,7 @@ public class ScheduleFragment extends ListFragment {
 
             Game game = (Game)getItem(i);
 
-            ((ImageView) view.findViewById(R.id.image_opponent)).setImageDrawable(game.opponentImage != 0 ? getResources().getDrawable(game.opponentImage) : null);
+            ((ImageView)view.findViewById(R.id.image_opponent)).setImageDrawable(game.opponentImage != 0 ? getResources().getDrawable(game.opponentImage) : null);
             ((TextView)view.findViewById(R.id.text_opponent_name)).setText(game.toString());
             ((TextView)view.findViewById(R.id.text_game_date)).setText(game.time);
 
