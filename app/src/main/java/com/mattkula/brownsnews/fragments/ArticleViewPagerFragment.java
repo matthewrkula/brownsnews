@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.mattkula.brownsnews.R;
 import com.mattkula.brownsnews.database.Article;
 import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
+import com.mattkula.brownsnews.utils.ViewUtils;
 
 import java.util.ArrayList;
 
@@ -192,8 +193,8 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         public void transformPage(View view, float v) {
             View header = (View)view.getTag();
             View image = (View)header.getTag();
-            header.setTranslationX(400 * v);
-            image.setTranslationX(-200 * v);
+            header.setTranslationX(ViewUtils.dpToPixels(400, getActivity()) * v);
+            image.setTranslationX(-ViewUtils.dpToPixels(200, getActivity()) * v);
         }
     };
 }

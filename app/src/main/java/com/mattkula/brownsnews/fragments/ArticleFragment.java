@@ -150,7 +150,7 @@ public class ArticleFragment extends Fragment {
             @Override
             public boolean onPreDraw() {
                 scrollView.getViewTreeObserver().removeOnPreDrawListener(this);
-                scrollView.setPadding(0, (int)(articleImage.getHeight() - ViewUtils.convertDpToPixel(40, getActivity())), 0, 20);
+                scrollView.setPadding(0, (int)(articleImage.getHeight() - ViewUtils.dpToPixels(40, getActivity())), 0, 20);
                 return false;
             }
         });
@@ -254,6 +254,6 @@ public class ArticleFragment extends Fragment {
     }
 
     public interface ArticleViewPagerDelegate {
-        public void removeArticleAtPosition(Article article);
+        void removeArticleAtPosition(Article article);
     }
 }
