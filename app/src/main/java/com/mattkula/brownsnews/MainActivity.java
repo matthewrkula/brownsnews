@@ -2,12 +2,11 @@ package com.mattkula.brownsnews;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -30,16 +29,18 @@ import com.mattkula.brownsnews.fragments.EmptyFragment;
 import com.mattkula.brownsnews.fragments.ScheduleFragment;
 import com.mattkula.brownsnews.sources.NewsSourceManager;
 import com.mattkula.brownsnews.utils.SimpleAnimatorListener;
+import com.mattkula.brownsnews.utils.ViewUtils;
 import com.mattkula.brownsnews.views.LoadingView;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class MainActivity extends FragmentActivity implements NewsSourceManager.OnArticlesDownloadedListener, SwipeRefreshLayout.OnRefreshListener{
 
-    ArrayList<Article> articles = new ArrayList<Article>();
+    ArrayList<Article> articles = new ArrayList<>();
 
     @InjectView(R.id.loading_view) LoadingView loadingView;
     @InjectView(R.id.tutorial_arrow) ImageView tutorialArrow;
@@ -63,15 +64,9 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        ViewUtils.updateActionBarFont(this);
 
-        int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
-        TextView actionBarTextview = (TextView)findViewById(titleId);
-        actionBarTextview.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Sentinel-Bold.ttf"));
-
-        if(!Prefs.getValueForKey(this, Prefs.TAG_LATEST_UPDATE, "0").equals(BuildConfig.VERSION_NAME)){
-//            showUpdateDialog();
-            Prefs.setValueForKey(this, Prefs.TAG_LATEST_UPDATE, BuildConfig.VERSION_NAME);
-        }
+        showUpdateDialogIfNeeded();
 
         dataSource = new ArticleDataSource(this);
         dataSource.open();
@@ -84,17 +79,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         scheduleFragment = new ScheduleFragment();
         emptyFragment = new EmptyFragment();
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, viewPagerFragment)
-                .commit();
-        getSupportFragmentManager().executePendingTransactions();
-
-        tutorialView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-            }
-        });
-
+        showFragment(viewPagerFragment);
         setUpArrowAnimations();
 
         menu.setAdapter(menuAdapter);
@@ -117,21 +102,19 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        tutorialView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                view.animate().alpha(0).setListener(new SimpleAnimatorListener() {
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        view.setVisibility(View.GONE);
-                    }
-                });
-            }
-        });
-
         UpdateManager.rescheduleUpdates(this);
 
         loadArticles(false);
+    }
+
+    @OnClick(R.id.tutorial_view)
+    public void onTutorialViewClick(final View view) {
+        view.animate().alpha(0).setListener(new SimpleAnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                view.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -152,20 +135,23 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         loadArticlesIntoFragment();
     }
 
-    private void showUpdateDialog(){
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("What's new?")
-                .setMessage("You can now view the team schedule from the sliding menu!")
-                .setPositiveButton("OK", null)
-                .create();
-
-        dialog.show();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         dataSource.close();
+    }
+
+    public void showUpdateDialogIfNeeded() {
+        if(!Prefs.getValueForKey(this, Prefs.TAG_LATEST_UPDATE, "0").equals(BuildConfig.VERSION_NAME)){
+//            AlertDialog dialog = new AlertDialog.Builder(this)
+//                    .setTitle("What's new?")
+//                    .setMessage("You can now view the team schedule from the sliding menu!")
+//                    .setPositiveButton("OK", null)
+//                    .create();
+//
+//            dialog.show();
+            Prefs.setValueForKey(this, Prefs.TAG_LATEST_UPDATE, BuildConfig.VERSION_NAME);
+        }
     }
 
     private void setUpArrowAnimations(){
@@ -317,6 +303,18 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         }
     };
 
+    private void showFragment(Fragment fragment) {
+        showFragment(fragment, FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+    }
+
+    private void showFragment(Fragment fragment, int transition) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .setTransition(transition)
+                .commit();
+        getSupportFragmentManager().executePendingTransactions();
+    }
+
     private AdapterView.OnItemClickListener menuItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -328,27 +326,17 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
             switch (i){
                 case 0:
                     viewPagerFragment = ArticleViewPagerFragment.newInstance(MainActivity.this.articles, true);
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, viewPagerFragment)
-                            .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
-                            .commit();
+                    showFragment(viewPagerFragment, FragmentTransaction.TRANSIT_ENTER_MASK);
                     break;
                 case 1:
                     ArrayList<Article> savedArticles = dataSource.getSavedArticles();
                     savedArticleFragment = ArticleViewPagerFragment.newInstance(savedArticles, false);
                     savedArticleFragment.setSwipeRefreshLayoutEnabled(false);
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, savedArticleFragment)
-                            .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
-                            .commit();
+                    showFragment(savedArticleFragment, FragmentTransaction.TRANSIT_ENTER_MASK);
                     break;
                 case 2:
 //                    scheduleFragment = new ScheduleFragment();
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, emptyFragment)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .commit();
-                    getSupportFragmentManager().executePendingTransactions();
+                    showFragment(emptyFragment, FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     break;
             }
 
