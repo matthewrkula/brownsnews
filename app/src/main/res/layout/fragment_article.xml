@@ -160,11 +160,12 @@
                         android:background="@null"
                         android:scrollbars="none"
                         android:alpha="0"
+                        android:textSize="15sp"
                         android:textColor="@android:color/white"
+                        android:textColorLink="@color/primary_light"
                         android:padding="10dp"
                         android:typeface="serif"
                         android:linksClickable="true"
-                        android:textColorLink="@color/primary_light"
                         tools:text="@string/lorem_ipsum"
                         tools:alpha="1"
                         />

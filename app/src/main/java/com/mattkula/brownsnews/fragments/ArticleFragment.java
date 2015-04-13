@@ -1,6 +1,7 @@
 package com.mattkula.brownsnews.fragments;
 
 import android.animation.Animator;
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -58,7 +59,6 @@ public class ArticleFragment extends Fragment {
     @InjectView(R.id.article_author) TextView textAuthor;
     @InjectView(R.id.article_source) TextView textSource;
     @InjectView(R.id.saved_text) TextView textSaved;
-//    @InjectView(R.id.article_content) WebView textContent;
     @InjectView(R.id.article_content) TextView textContent;
     @InjectView(R.id.image_read) ImageView imageRead;
     @InjectView(R.id.scrollview) NotifyingScrollView scrollView;
@@ -76,6 +76,109 @@ public class ArticleFragment extends Fragment {
         myFragment.setArguments(args);
 
         return myFragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_article, container, false);
+        ButterKnife.inject(this, v);
+        shownCharacters = getActivity().getResources().getInteger(R.integer.article_character_length);
+
+        dataSource = new ArticleDataSource(getActivity()).open();
+
+        this.article = (Article)getArguments().getSerializable(TAG_ARTICLE);
+
+        // Tags are set for ViewPager Transformer caching (mock ViewHolder pattern)
+        v.setTag(articleHeader);
+        articleHeader.setTag(articleImage);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ((SwipeRefreshLayout.OnRefreshListener) getActivity()).onRefresh();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeColors(R.color.primary_light, R.color.primary_light, R.color.primary_dark, R.color.primary_light);
+        swipeRefreshLayout.setEnabled(isSwipeToRefreshEnabled);
+
+        textTitle.setText(article.title);
+        textTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(@NonNull View view) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(article.link));
+                startActivity(i);
+            }
+        });
+
+        imageRead.setAlpha(article.isRead ? 1f : 0f);
+
+        textAuthor.setText("By: " + article.author + " on " + article.publishedDate.toLocaleString());
+        textSource.setText("Via: " + article.newsSource);
+
+        textContent.setAlpha(1);
+        textContent.setBackgroundColor(Color.argb(1, 0, 0, 0));
+        textContent.setBackgroundResource(R.color.primary_dark);
+        textContent.setMovementMethod(LinkMovementMethod.getInstance());
+
+        reloadContent();
+
+        if(!article.imageUrl.equals("none")){
+            Glide.with(this)
+                    .load(article.imageUrl)
+                    .asBitmap()
+                    .placeholder(R.drawable.browns_dog)
+                    .listener(new RequestListener<String, Bitmap>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            v.findViewById(R.id.article_image_shadow).animate().alpha(1).start();
+                            return false;
+                        }
+                    })
+                    .animate(android.R.anim.fade_in)
+                    .into(articleImage);
+        } else {
+            double d = Math.random();
+            articleImage.setImageDrawable((getResources().getDrawable(d > 0.5 ? R.drawable.browns_dog : R.drawable.brownie)));
+            articleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        }
+
+        scrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
+                articleHeader.setTranslationY(-t * .2f);
+                articleImage.setTranslationY(t * .1f);
+
+                ActionBar ab = getActivity().getActionBar();
+                if (ab != null && t - oldt > 10) {
+                    ab.hide();
+                } else if (ab != null && t == 0) {
+                    ab.show();
+                }
+            }
+        });
+        scrollView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                scrollView.getViewTreeObserver().removeOnPreDrawListener(this);
+                scrollView.setPadding(0, (int)(articleImage.getHeight() - ViewUtils.dpToPixels(40, getActivity())), 0, 20);
+                return false;
+            }
+        });
+        final GestureDetector detector = new GestureDetector(getActivity(), gestureListener);
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, @NonNull MotionEvent motionEvent) {
+                return detector.onTouchEvent(motionEvent);
+            }
+        });
+
+        return v;
     }
 
     private void reloadContent() {
@@ -108,104 +211,6 @@ public class ArticleFragment extends Fragment {
     public void loadMoreOfArticle() {
         shownCharacters *= 2;
         reloadContent();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_article, container, false);
-        ButterKnife.inject(this, v);
-        shownCharacters = getActivity().getResources().getInteger(R.integer.article_character_length);
-
-        dataSource = new ArticleDataSource(getActivity()).open();
-
-        this.article = (Article)getArguments().getSerializable(TAG_ARTICLE);
-
-        // Tags are set for ViewPager Transformer caching (mock ViewHolder pattern)
-        v.setTag(articleHeader);
-        articleHeader.setTag(articleImage);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                ((SwipeRefreshLayout.OnRefreshListener) getActivity()).onRefresh();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-        swipeRefreshLayout.setColorSchemeColors(R.color.primary_light, R.color.primary_light, R.color.primary_dark, R.color.primary_light);
-        swipeRefreshLayout.setEnabled(isSwipeToRefreshEnabled);
-
-        textTitle.setText(article.title);
-        textTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(article.link));
-                startActivity(i);
-            }
-
-        });
-
-        imageRead.setAlpha(article.isRead ? 1f : 0f);
-
-        textAuthor.setText("By: " + article.author + " on " + article.publishedDate.toLocaleString());
-        textSource.setText("Via: " + article.newsSource);
-
-        textContent.setAlpha(1);
-//        textContent.getSettings().setUseWideViewPort(false);
-        textContent.setBackgroundColor(Color.argb(1, 0, 0, 0));
-        textContent.setBackgroundResource(R.color.primary_dark);
-//        textContent.loadData(getStyle(article.content), "text/html; charset=UTF-8", null);
-        textContent.setMovementMethod(LinkMovementMethod.getInstance());
-
-        reloadContent();
-
-        if(!article.imageUrl.equals("none")){
-            Glide.with(this)
-                    .load(article.imageUrl)
-                    .asBitmap()
-                    .placeholder(R.drawable.browns_dog)
-                    .listener(new RequestListener<String, Bitmap>() {
-                        @Override
-                        public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            v.findViewById(R.id.article_image_shadow).animate().alpha(1).start();
-                            return false;
-                        }
-                    })
-                    .into(articleImage);
-        } else {
-            double d = Math.random();
-            articleImage.setImageDrawable((getResources().getDrawable(d > 0.5 ? R.drawable.browns_dog : R.drawable.brownie)));
-            articleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        }
-
-        scrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
-                articleHeader.setTranslationY(-t * .2f);
-                articleImage.setTranslationY(t * .1f);
-            }
-        });
-        scrollView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                scrollView.getViewTreeObserver().removeOnPreDrawListener(this);
-                scrollView.setPadding(0, (int)(articleImage.getHeight() - ViewUtils.dpToPixels(40, getActivity())), 0, 20);
-                return false;
-            }
-        });
-        final GestureDetector detector = new GestureDetector(getActivity(), gestureListener);
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, @NonNull MotionEvent motionEvent) {
-                return detector.onTouchEvent(motionEvent);
-            }
-        });
-
-        return v;
     }
 
     @Override

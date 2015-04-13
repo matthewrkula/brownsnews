@@ -58,6 +58,14 @@ public class ArticleViewPagerFragment extends Fragment implements ArticleFragmen
         ButterKnife.inject(this, v);
 
         viewPager.setPageTransformer(false, pageTransformer);
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (getActivity().getActionBar() != null) {
+                    getActivity().getActionBar().show();
+                }
+            }
+        });
 
         ArrayList<Article> bundleArticles = (ArrayList<Article>)getArguments().getSerializable(TAG_ARTICLES);
 
