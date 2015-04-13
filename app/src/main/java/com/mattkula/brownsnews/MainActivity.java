@@ -2,6 +2,7 @@ package com.mattkula.brownsnews;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -59,6 +60,8 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     boolean showNewArticles = true;
     ArticleDataSource dataSource;
 
+    ProgressDialog dialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +106,10 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
         getActionBar().setHomeButtonEnabled(true);
 
         UpdateManager.rescheduleUpdates(this);
+
+        if (Prefs.isFirstTime(this)) {
+            dialog = ProgressDialog.show(this, null, "Finding Browns articles for you...");
+        }
 
         loadArticles(false);
     }
@@ -181,6 +188,9 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     public void onArticlesDownloaded() {
         loadArticlesIntoFragment();
         loadingView.dismiss();
+        if (dialog != null) {
+            dialog.hide();
+        }
 
         if(Prefs.isFirstTime(this)){
             tutorialView.setVisibility(View.VISIBLE);

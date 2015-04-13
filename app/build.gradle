@@ -8,8 +8,8 @@ android {
         applicationId "com.mattkula.brownsnews"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 11
-        versionName "1.5.1"
+        versionCode 13
+        versionName "2.0.1"
     }
 
     buildTypes {
