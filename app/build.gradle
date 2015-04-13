@@ -18,6 +18,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    productFlavors {
+        development {
+            applicationId "com.mattkula.brownsnews.development"
+        }
+
+        production {
+            applicationId "com.mattkula.brownsnews"
+        }
+    }
 }
 
 dependencies {

@@ -8,9 +8,13 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -20,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -38,6 +41,7 @@ import com.mattkula.brownsnews.views.NotifyingScrollView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class ArticleFragment extends Fragment {
@@ -54,12 +58,15 @@ public class ArticleFragment extends Fragment {
     @InjectView(R.id.article_author) TextView textAuthor;
     @InjectView(R.id.article_source) TextView textSource;
     @InjectView(R.id.saved_text) TextView textSaved;
-    @InjectView(R.id.article_content) WebView textContent;
+//    @InjectView(R.id.article_content) WebView textContent;
+    @InjectView(R.id.article_content) TextView textContent;
     @InjectView(R.id.image_read) ImageView imageRead;
     @InjectView(R.id.scrollview) NotifyingScrollView scrollView;
     @InjectView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.article_continue) TextView continueButton;
 
     boolean isSwipeToRefreshEnabled = true;
+    int shownCharacters = 2000;
 
     public static ArticleFragment newInstance(Article article) {
         ArticleFragment myFragment = new ArticleFragment();
@@ -71,10 +78,43 @@ public class ArticleFragment extends Fragment {
         return myFragment;
     }
 
+    private void reloadContent() {
+        final Handler handler = new Handler();
+
+        new Thread() {
+            @Override
+            public void run() {
+                String content = article.content;
+                boolean visible = false;
+                if (content.length() >= shownCharacters) {
+                    content = content.substring(0, shownCharacters);
+                    visible = true;
+                }
+
+                final Spanned spanned = Html.fromHtml(content);
+                final boolean finalVisible = visible;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        textContent.setText(spanned);
+                        continueButton.setVisibility(finalVisible ? View.VISIBLE : View.GONE);
+                    }
+                });
+            }
+        }.start();
+    }
+
+    @OnClick(R.id.article_continue)
+    public void loadMoreOfArticle() {
+        shownCharacters *= 2;
+        reloadContent();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_article, container, false);
         ButterKnife.inject(this, v);
+        shownCharacters = getActivity().getResources().getInteger(R.integer.article_character_length);
 
         dataSource = new ArticleDataSource(getActivity()).open();
 
@@ -110,10 +150,13 @@ public class ArticleFragment extends Fragment {
         textSource.setText("Via: " + article.newsSource);
 
         textContent.setAlpha(1);
-        textContent.getSettings().setUseWideViewPort(false);
+//        textContent.getSettings().setUseWideViewPort(false);
         textContent.setBackgroundColor(Color.argb(1, 0, 0, 0));
         textContent.setBackgroundResource(R.color.primary_dark);
-        textContent.loadData(getStyle(article.content), "text/html; charset=UTF-8", null);
+//        textContent.loadData(getStyle(article.content), "text/html; charset=UTF-8", null);
+        textContent.setMovementMethod(LinkMovementMethod.getInstance());
+
+        reloadContent();
 
         if(!article.imageUrl.equals("none")){
             Glide.with(this)
