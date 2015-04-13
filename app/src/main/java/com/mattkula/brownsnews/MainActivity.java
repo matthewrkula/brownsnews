@@ -58,6 +58,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     int currentFragmentIndex = 0;
     boolean showNewArticles = true;
+    boolean isCreated = false;
     ArticleDataSource dataSource;
 
     ProgressDialog dialog;
@@ -65,6 +66,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isCreated = true;
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         ViewUtils.updateActionBarFont(this);
@@ -145,6 +147,7 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isCreated = false;
         dataSource.close();
     }
 
@@ -186,6 +189,10 @@ public class MainActivity extends FragmentActivity implements NewsSourceManager.
 
     @Override
     public void onArticlesDownloaded() {
+        if (!isCreated) {
+            return;
+        }
+
         loadArticlesIntoFragment();
         loadingView.dismiss();
         if (dialog != null) {
