@@ -81,7 +81,7 @@ public class UpdateService extends IntentService implements NewsSourceManager.On
 
         Notification notification = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.logo)
-                .setContentTitle("More Browns News!")
+                .setContentTitle("More Brown and Orange News!")
                 .setContentText(title)
                 .setContentIntent(pendingIntent)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(title))

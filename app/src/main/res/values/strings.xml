@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Browns News</string>
+    <string name="app_name">Brown and Orange News</string>
     <string name="article_saved">Saved</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum orci sem, vel facilisis enim facilisis ac.
